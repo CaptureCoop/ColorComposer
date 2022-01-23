@@ -74,7 +74,6 @@ public class CCAlphaBar extends JPanel {
     }
 
     private void execute(int x, int y) {
-        dirty = true;
         int pos = y;
         int size = getHeight();
         if(direction == CCColorUtils.DIRECTION.HORIZONTAL) {
@@ -118,36 +117,33 @@ public class CCAlphaBar extends JPanel {
 
     @Override
     public void paint(Graphics g) {
-        if(!dirty && buffer != null) {
-            g.drawImage(buffer, 0, 0, this);
-            return;
-        }
-
         if(buffer == null || !(buffer.getWidth() == getWidth() && buffer.getHeight() == getHeight())) {
-            buffer = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
+            buffer = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
         }
-
-        Graphics bufferGraphics = buffer.getGraphics();
-        dirty = false;
 
         int sizeX = getSizeX();
         int sizeY = getSizeY();
-        bufferGraphics.setColor(getBackground());
-        bufferGraphics.fillRect(0, 0, getWidth(), getHeight());
+        g.setColor(getBackground());
+        g.fillRect(0, 0, getWidth(), getHeight());
         int amount = sizeX / sizeY;
-        if(gridImage != null) {
-            for (int i = 0; i < amount; i++) {
-                bufferGraphics.drawImage(gridImage, MARGIN / 2 + i * sizeY, MARGIN / 2, sizeY, sizeY, this);
+        if(!dirty) {
+            g.drawImage(buffer, 0, 0, this);
+        } else {
+            Graphics bufferGraphics = buffer.getGraphics();
+            if(gridImage != null) {
+                for (int i = 0; i < amount; i++) {
+                    bufferGraphics.drawImage(gridImage, MARGIN / 2 + i * sizeY, MARGIN / 2, sizeY, sizeY, this);
+                }
             }
+            bufferGraphics.drawImage(CCColorUtils.createAlphaBar(color.getPrimaryColor(), sizeX, sizeY, direction), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
+            bufferGraphics.dispose();
+            dirty = false;
+            g.drawImage(buffer, 0, 0, this);
         }
-        bufferGraphics.drawImage(CCColorUtils.createAlphaBar(color.getPrimaryColor(), sizeX, sizeY, direction), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
-        bufferGraphics.setColor(Color.BLACK);
-        bufferGraphics.drawRect(MARGIN / 2 - 1, MARGIN / 2 - 1, sizeX + 1, sizeY + 1);
-        bufferGraphics.setColor(Color.GRAY);
+        g.setColor(Color.BLACK);
+        g.drawRect(MARGIN / 2 - 1, MARGIN / 2 - 1, sizeX + 1, sizeY + 1);
+        g.setColor(Color.GRAY);
         Rectangle rect = getSelectRect();
-        bufferGraphics.fillRect(rect.x, rect.y, rect.width, rect.height);
-
-        bufferGraphics.dispose();
-        g.drawImage(buffer, 0, 0, this);
+        g.fillRect(rect.x, rect.y, rect.width, rect.height);
     }
 }
