@@ -1,5 +1,6 @@
 package org.capturecoop.cccolorutils;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.capturecoop.ccutils.utils.CCStringUtils;
 
 import java.awt.*;
@@ -52,7 +53,26 @@ public class CCHSB {
         return alpha;
     }
 
+    @Override
     public String toString() {
         return CCStringUtils.format("CCHSB [hue: %c, saturation: %c, brightness: %c, alpha: %c]", hue, saturation, brightness, alpha);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o)
+            return true;
+
+        if(o == null || getClass() != o.getClass())
+            return false;
+
+        CCHSB other = (CCHSB) o;
+
+        return new EqualsBuilder()
+                .append(hue, other.hue)
+                .append(saturation, other.saturation)
+                .append(brightness, other.brightness)
+                .append(alpha, other.alpha)
+                .isEquals();
     }
 }
