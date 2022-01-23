@@ -115,6 +115,7 @@ public class CCAlphaBar extends JPanel {
         return null;
     }
 
+    //TODO: Currently we rerender the buffer everytime anything about the color is changed. This includes alpha... Save the last rendered color and check if only the alpha changed
     @Override
     public void paint(Graphics g) {
         if(buffer == null || !(buffer.getWidth() == getWidth() && buffer.getHeight() == getHeight())) {
