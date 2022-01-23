@@ -125,14 +125,21 @@ public class CCAlphaBar extends JPanel {
         int sizeY = getSizeY();
         g.setColor(getBackground());
         g.fillRect(0, 0, getWidth(), getHeight());
-        int amount = sizeX / sizeY;
         if(!dirty) {
             g.drawImage(buffer, 0, 0, this);
         } else {
             Graphics bufferGraphics = buffer.getGraphics();
             if(gridImage != null) {
-                for (int i = 0; i < amount; i++) {
-                    bufferGraphics.drawImage(gridImage, MARGIN / 2 + i * sizeY, MARGIN / 2, sizeY, sizeY, this);
+                if(direction == CCColorUtils.DIRECTION.HORIZONTAL) {
+                    int amount = sizeX / sizeY;
+                    for (int i = 0; i < amount; i++) {
+                        bufferGraphics.drawImage(gridImage, MARGIN / 2 + i * sizeY, MARGIN / 2, sizeY, sizeY, this);
+                    }
+                } else {
+                    int amount = sizeY / sizeX;
+                    for (int i = 0; i < amount; i++) {
+                        bufferGraphics.drawImage(gridImage, MARGIN / 2, MARGIN / 2 + i * sizeX, sizeX, sizeX, this);
+                    }
                 }
             }
             bufferGraphics.drawImage(CCColorUtils.createAlphaBar(color.getPrimaryColor(), sizeX, sizeY, direction), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
