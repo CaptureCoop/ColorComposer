@@ -78,6 +78,7 @@ public class CCHSBHueBar extends JPanel {
         if(!isDragging) {
             dirty = true;
             position = new CCHSB(color.getPrimaryColor()).getHue();
+            repaint();
         }
     }
 

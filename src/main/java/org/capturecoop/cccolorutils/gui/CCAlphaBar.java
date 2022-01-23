@@ -92,6 +92,7 @@ public class CCAlphaBar extends JPanel {
         if(!isDragging) {
             dirty = true;
             position = ((color.getPrimaryColor().getAlpha() * 100F) / 255F) / 100F;
+            repaint();
         }
     }
 
