@@ -93,7 +93,7 @@ public class CCHSBPicker extends JPanel {
 
     @Override
     public void paint(Graphics g) {
-        if(!dirty) {
+        if(!dirty && buffer != null) {
             g.drawImage(buffer, 0, 0, this);
             return;
         }
@@ -115,6 +115,7 @@ public class CCHSBPicker extends JPanel {
         bufferGraphics.setColor(Color.GRAY);
         Rectangle rect = getSelectRect();
         bufferGraphics.fillRect(rect.x, rect.y, rect.width, rect.height);
+
         bufferGraphics.dispose();
         g.drawImage(buffer, 0, 0, this);
     }

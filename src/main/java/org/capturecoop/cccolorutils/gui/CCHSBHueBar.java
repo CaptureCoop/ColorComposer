@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.image.BufferedImage;
 
 public class CCHSBHueBar extends JPanel {
     private CCColor color;
@@ -20,6 +21,9 @@ public class CCHSBHueBar extends JPanel {
     private final static int SEL_MARGIN = 4;
     private final static int SEL_MARGIN_OFF = 2;
     private boolean isDragging = false;
+
+    private BufferedImage buffer;
+    private boolean dirty = true;
 
     public CCHSBHueBar(CCColor color, CCColorUtils.DIRECTION direction, boolean alwaysGrab) {
         this.color = color;
@@ -55,6 +59,7 @@ public class CCHSBHueBar extends JPanel {
     }
 
     private void execute(int x, int y) {
+        dirty = true;
         int pos = y;
         int size = getHeight();
         if(direction == CCColorUtils.DIRECTION.HORIZONTAL) {
@@ -70,8 +75,10 @@ public class CCHSBHueBar extends JPanel {
     }
 
     private void updateHSV() {
-        if(!isDragging)
+        if(!isDragging) {
+            dirty = true;
             position = new CCHSB(color.getPrimaryColor()).getHue();
+        }
     }
 
     private int getSizeX() {
@@ -96,15 +103,30 @@ public class CCHSBHueBar extends JPanel {
 
     @Override
     public void paint(Graphics g) {
+        if(!dirty && buffer != null) {
+            g.drawImage(buffer, 0, 0, this);
+            return;
+        }
+
+        if(buffer == null || !(buffer.getWidth() == getWidth() && buffer.getHeight() == getHeight())) {
+            buffer = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
+        }
+
+        Graphics bufferGraphics = buffer.getGraphics();
+        dirty = false;
+
         int sizeX = getSizeX();
         int sizeY = getSizeY();
-        g.setColor(getBackground());
-        g.fillRect(0, 0, getWidth(), getHeight());
-        g.drawImage(CCColorUtils.createHSVHueBar(sizeX, sizeY, direction), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
-        g.setColor(Color.BLACK);
-        g.drawRect(MARGIN / 2 - 1, MARGIN / 2 - 1, sizeX + 1, sizeY + 1);
-        g.setColor(Color.GRAY);
+        bufferGraphics.setColor(getBackground());
+        bufferGraphics.fillRect(0, 0, getWidth(), getHeight());
+        bufferGraphics.drawImage(CCColorUtils.createHSVHueBar(sizeX, sizeY, direction), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
+        bufferGraphics.setColor(Color.BLACK);
+        bufferGraphics.drawRect(MARGIN / 2 - 1, MARGIN / 2 - 1, sizeX + 1, sizeY + 1);
+        bufferGraphics.setColor(Color.GRAY);
         Rectangle rect = getSelectRect();
-        g.fillRect(rect.x, rect.y, rect.width, rect.height);
+        bufferGraphics.fillRect(rect.x, rect.y, rect.width, rect.height);
+
+        bufferGraphics.dispose();
+        g.drawImage(buffer, 0, 0, this);
     }
 }
