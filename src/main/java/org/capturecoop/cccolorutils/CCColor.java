@@ -78,8 +78,7 @@ public class CCColor {
         return CCStringUtils.format("CCColor[R: %c, G: %c, B: %c]", color.getRed(), color.getGreen(), color.getBlue());
     }
 
-    @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o, VALUE_TYPE... toCompare) {
         if(this == o)
             return true;
 
@@ -87,10 +86,19 @@ public class CCColor {
             return false;
 
         CCColor other = (CCColor) o;
+        for(VALUE_TYPE type : toCompare) {
+            switch (type) {
+                case RED: if(color.getRed() != other.color.getRed()) return false;
+                case GREEN: if(color.getGreen() != other.color.getGreen()) return false;
+                case BLUE: if(color.getBlue() != other.color.getBlue()) return false;
+                case ALPHA: if(color.getAlpha() != other.color.getAlpha()) return false;
+            }
+        }
+        return true;
+    }
 
-        return new EqualsBuilder()
-                .append(color.getRGB(), other.color.getRGB())
-                .append(color.getAlpha(), other.color.getAlpha())
-                .isEquals();
+    @Override
+    public boolean equals(Object o) {
+        return equals(o, VALUE_TYPE.RED, VALUE_TYPE.GREEN, VALUE_TYPE.BLUE, VALUE_TYPE.ALPHA);
     }
 }
