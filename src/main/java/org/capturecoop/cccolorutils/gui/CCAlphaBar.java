@@ -1,6 +1,6 @@
 package org.capturecoop.cccolorutils.gui;
 
-import org.capturecoop.cccolorutils.CCGradientColor;
+import org.capturecoop.cccolorutils.CCColor;
 import org.capturecoop.cccolorutils.CCColorUtils;
 import org.capturecoop.ccutils.math.CCVector2Float;
 import org.capturecoop.ccutils.utils.CCMathUtils;
@@ -15,9 +15,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class CCAlphaBar extends JPanel {
-    private CCGradientColor color;
+    private CCColor color;
     private float position;
-    private CCColorUtils.DIRECTION direction;
+    private final CCColorUtils.DIRECTION direction;
 
     private final static int MARGIN = 10;
     private final static int SEL_MARGIN = 4;
@@ -31,7 +31,7 @@ public class CCAlphaBar extends JPanel {
     private BufferedImage buffer;
     private boolean dirty = true;
 
-    public CCAlphaBar(CCGradientColor color, CCColorUtils.DIRECTION direction, boolean alwaysGrab) {
+    public CCAlphaBar(CCColor color, CCColorUtils.DIRECTION direction, boolean alwaysGrab) {
         this.color = color;
         this.direction = direction;
 
@@ -82,15 +82,15 @@ public class CCAlphaBar extends JPanel {
         }
         float percentage = (pos * 100F) / size;
         position = new CCVector2Float(percentage / 100F, 0).limitX(0, 1).getX();
-        Color oldColor = color.getPrimaryColor();
-        color.setPrimaryColor(new Color(oldColor.getRed(), oldColor.getGreen(), oldColor.getBlue(), CCMathUtils.clampInt((int)(position * 255), 0, 255)));
+        Color oldColor = color.getRawColor();
+        color.setColor(new Color(oldColor.getRed(), oldColor.getGreen(), oldColor.getBlue(), CCMathUtils.clampInt((int)(position * 255), 0, 255)));
         repaint();
     }
 
     private void updateAlpha() {
         if(!isDragging) {
             dirty = true;
-            position = ((color.getPrimaryColor().getAlpha() * 100F) / 255F) / 100F;
+            position = ((color.getAlpha() * 100F) / 255F) / 100F;
             repaint();
         }
     }
@@ -141,7 +141,7 @@ public class CCAlphaBar extends JPanel {
                     }
                 }
             }
-            bufferGraphics.drawImage(CCColorUtils.createAlphaBar(color.getPrimaryColor(), sizeX, sizeY, direction), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
+            bufferGraphics.drawImage(CCColorUtils.createAlphaBar(color.getRawColor(), sizeX, sizeY, direction), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
             bufferGraphics.dispose();
             dirty = false;
         }
