@@ -11,8 +11,8 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class CCGradientColor {
-    private Color primaryColor;
-    private Color secondaryColor;
+    private CCColor primaryColor;
+    private CCColor secondaryColor;
     private CCVector2Float point1;
     private CCVector2Float point2;
     private boolean isGradient = false;
@@ -21,12 +21,12 @@ public class CCGradientColor {
 
     private final ArrayList<ChangeListener> listeners = new ArrayList<>();
 
-    public CCGradientColor() {
-        primaryColor = Color.WHITE;
+    public CCGradientColor(Color color) {
+        this.primaryColor = new CCColor(color);
     }
 
-    public CCGradientColor(Color color) {
-        this.primaryColor = color;
+    public CCGradientColor() {
+        this(Color.WHITE);
     }
 
     public CCGradientColor(CCGradientColor color) {
@@ -38,38 +38,42 @@ public class CCGradientColor {
     }
 
     public CCGradientColor(CCGradientColor color, int alpha) {
-        primaryColor = new Color(color.primaryColor.getRed(), color.primaryColor.getGreen(), color.primaryColor.getBlue(), alpha);
-        if(color.secondaryColor != null) secondaryColor = new Color(color.secondaryColor.getRed(), color.secondaryColor.getGreen(), color.secondaryColor.getBlue(), alpha);
+        primaryColor = color.primaryColor;
+        primaryColor.setAlpha(alpha);
+        if(color.secondaryColor != null) {
+            secondaryColor = color.secondaryColor;
+            secondaryColor.setAlpha(alpha);
+        }
         isGradient = color.isGradient;
         if(color.point1 != null) point1 = new CCVector2Float(color.point1);
         if(color.point2 != null) point2 = new CCVector2Float(color.point2);
     }
 
     public CCGradientColor(Color primaryColor, Color secondaryColor, boolean isGradient) {
-        this.primaryColor = primaryColor;
-        this.secondaryColor = secondaryColor;
+        this.primaryColor = new CCColor(primaryColor);
+        this.secondaryColor = new CCColor(secondaryColor);
         this.isGradient = isGradient;
     }
 
     public CCGradientColor(Color c, int alpha) {
-        primaryColor = new Color(c.getRed(), c.getGreen(), c.getBlue(), alpha);
+        primaryColor = new CCColor(c.getRed(), c.getGreen(), c.getBlue(), alpha);
     }
 
     public CCGradientColor(int r, int g, int b, int a) {
-        primaryColor = new Color(r, g, b, a);
+        primaryColor = new CCColor(r, g, b, a);
     }
 
-    public Color getColor(COLOR_TYPE type) {
+    public CCColor getColor(COLOR_TYPE type) {
         if (type == COLOR_TYPE.SECONDARY)
             return secondaryColor;
         return primaryColor;
     }
 
-    public Color getPrimaryColor() {
+    public CCColor getPrimaryColor() {
         return primaryColor;
     }
 
-    public Color getSecondaryColor() {
+    public CCColor getSecondaryColor() {
         return secondaryColor;
     }
 
@@ -82,7 +86,7 @@ public class CCGradientColor {
     }
 
     public void setPrimaryColor(Color color) {
-        primaryColor = color;
+        primaryColor = new CCColor(color);
         alertChangeListeners();
     }
 
@@ -95,7 +99,7 @@ public class CCGradientColor {
     }
 
     public void setSecondaryColor(Color color) {
-        secondaryColor = color;
+        secondaryColor = new CCColor(color);
         alertChangeListeners();
     }
 
@@ -129,7 +133,7 @@ public class CCGradientColor {
 
     public Paint getGradientPaint(int width, int height, int posX, int posY) {
         if(!isGradient) {
-            return primaryColor;
+            return primaryColor.getRawColor();
         }
 
         if(secondaryColor == null)
@@ -142,7 +146,7 @@ public class CCGradientColor {
 
         CCVector2Int point1int = new CCVector2Int(point1.getX() * width, point1.getY() * height);
         CCVector2Int point2int = new CCVector2Int(point2.getX() * width, point2.getY() * height);
-        return new GradientPaint(point1int.getX() + posX, point1int.getY() + posY, primaryColor, point2int.getX() + posX, point2int.getY() + posY, secondaryColor);
+        return new GradientPaint(point1int.getX() + posX, point1int.getY() + posY, primaryColor.getRawColor(), point2int.getX() + posX, point2int.getY() + posY, secondaryColor.getRawColor());
     }
 
     public Paint getGradientPaint(int width, int height) {
@@ -160,7 +164,7 @@ public class CCGradientColor {
     }
 
     public String toSaveString() {
-        String string = CCColorUtils.rgb2hex(primaryColor);
+        String string = CCColorUtils.rgb2hex(primaryColor.getRawColor());
         if(primaryColor.getAlpha() != 255)
             string += "_a" + primaryColor.getAlpha();
 
@@ -170,7 +174,7 @@ public class CCGradientColor {
         string += "_G" + isGradient();
 
         if(secondaryColor != null) {
-            string += "___" + CCColorUtils.rgb2hex(secondaryColor);
+            string += "___" + CCColorUtils.rgb2hex(secondaryColor.getRawColor());
             if(secondaryColor.getAlpha() != 255)
                 string += "_a" + secondaryColor.getAlpha();
             if (point2 != null)
@@ -203,9 +207,9 @@ public class CCGradientColor {
 
                 if(color != null) {
                     if(index == 0)
-                        newColor.primaryColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha);
+                        newColor.primaryColor = new CCColor(color.getRed(), color.getGreen(), color.getBlue(), alpha);
                     else if(index == 1)
-                        newColor.secondaryColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha);
+                        newColor.secondaryColor = new CCColor(color.getRed(), color.getGreen(), color.getBlue(), alpha);
                 }
 
 

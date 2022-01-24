@@ -25,6 +25,15 @@ public class CCColor {
         this(color.color);
     }
 
+    public CCColor(int r, int g, int b, int a) {
+        this(new Color(r, g, b, a));
+    }
+
+    public void setAlpha(int alpha) {
+        Color oldColor = color;
+        color = new Color(oldColor.getRed(), oldColor.getGreen(), oldColor.getBlue(), alpha);
+    }
+
     public void setColor(Color color) {
         this.color = color;
         alertChangeListeners();
@@ -38,6 +47,30 @@ public class CCColor {
 
     public void addChangeListener(ChangeListener listener) {
         listeners.add(listener);
+    }
+
+    public int getRed() {
+        return color.getRed();
+    }
+
+    public int getGreen() {
+        return color.getGreen();
+    }
+
+    public int getBlue() {
+        return color.getBlue();
+    }
+
+    public int getAlpha() {
+        return color.getAlpha();
+    }
+
+    public int getRGB() {
+        return color.getRGB();
+    }
+
+    public Color getRawColor() {
+        return color;
     }
 
     @Override
