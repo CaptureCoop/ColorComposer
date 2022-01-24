@@ -1,6 +1,6 @@
 package org.capturecoop.cccolorutils.gui;
 
-import org.capturecoop.cccolorutils.CCGradientColor;
+import org.capturecoop.cccolorutils.CCColor;
 import org.capturecoop.cccolorutils.CCColorUtils;
 import org.capturecoop.cccolorutils.CCHSB;
 import org.capturecoop.ccutils.math.CCVector2Float;
@@ -13,7 +13,7 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 
 public class CCHSBPicker extends JPanel {
-    private CCGradientColor color;
+    private CCColor color;
     private CCVector2Float position;
 
     private static final int MARGIN = 10;
@@ -23,7 +23,7 @@ public class CCHSBPicker extends JPanel {
     private BufferedImage buffer;
     private boolean dirty = true;
 
-    public CCHSBPicker(CCGradientColor color, boolean alwaysGrab) {
+    public CCHSBPicker(CCColor color, boolean alwaysGrab) {
         this.color = color;
         updatePosition();
         color.addChangeListener(changeEvent -> updatePosition());
@@ -61,8 +61,8 @@ public class CCHSBPicker extends JPanel {
         float percentageY = (y * 100F) / getHeight();
         float pointX = new CCVector2Float(percentageX / 100F, 0).limitX(0F, 1F).getX();
         float pointY = new CCVector2Float(percentageY / 100F, 0).limitX(0F, 1F).getX();
-        CCHSB current = new CCHSB(color.getPrimaryColor());
-        color.setPrimaryColor(new CCHSB(current.getHue(), position.getX(), position.getY(), current.getAlpha()).toRGB());
+        CCHSB current = new CCHSB(color.getRawColor());
+        color.setColor(new CCHSB(current.getHue(), position.getX(), position.getY(), current.getAlpha()).toRGB());
         pointY = (pointY - 1) * - 1;
         position = new CCVector2Float(pointX, pointY);
         repaint();
@@ -77,7 +77,7 @@ public class CCHSBPicker extends JPanel {
     public void updatePosition() {
         if(!isDragging) {
             dirty = true;
-            CCHSB hsb = new CCHSB(color.getPrimaryColor());
+            CCHSB hsb = new CCHSB(color.getRawColor());
             position = new CCVector2Float(hsb.getSaturation(), hsb.getBrightness());
             repaint();
         }
@@ -109,7 +109,7 @@ public class CCHSBPicker extends JPanel {
         int sizeY = getSizeY();
         bufferGraphics.setColor(getBackground());
         bufferGraphics.fillRect(0, 0, getWidth(), getHeight());
-        bufferGraphics.drawImage(CCColorUtils.createHSVBox(getWidth(), getHeight(), new CCHSB(color.getPrimaryColor()).getHue()), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
+        bufferGraphics.drawImage(CCColorUtils.createHSVBox(getWidth(), getHeight(), new CCHSB(color.getRawColor()).getHue()), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
         bufferGraphics.setColor(Color.BLACK);
         bufferGraphics.drawRect(MARGIN / 2 - 1, MARGIN / 2 - 1, sizeX + 1, sizeY + 1);
         bufferGraphics.setColor(Color.GRAY);

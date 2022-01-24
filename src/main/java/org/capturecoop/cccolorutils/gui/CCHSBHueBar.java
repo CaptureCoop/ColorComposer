@@ -1,6 +1,6 @@
 package org.capturecoop.cccolorutils.gui;
 
-import org.capturecoop.cccolorutils.CCGradientColor;
+import org.capturecoop.cccolorutils.CCColor;
 import org.capturecoop.cccolorutils.CCColorUtils;
 import org.capturecoop.cccolorutils.CCHSB;
 import org.capturecoop.ccutils.math.CCVector2Float;
@@ -13,7 +13,7 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 
 public class CCHSBHueBar extends JPanel {
-    private CCGradientColor color;
+    private CCColor color;
     private float position;
     private final CCColorUtils.DIRECTION direction;
 
@@ -25,7 +25,7 @@ public class CCHSBHueBar extends JPanel {
     private BufferedImage buffer;
     private boolean dirty = true;
 
-    public CCHSBHueBar(CCGradientColor color, CCColorUtils.DIRECTION direction, boolean alwaysGrab) {
+    public CCHSBHueBar(CCColor color, CCColorUtils.DIRECTION direction, boolean alwaysGrab) {
         this.color = color;
         this.direction = direction;
         updateHSV();
@@ -68,8 +68,8 @@ public class CCHSBHueBar extends JPanel {
         }
         float percentage = (pos * 100F) / size;
         position = new CCVector2Float(percentage / 100F, 0).limitX(0.01F, 0.99F).getX();
-        CCHSB current = new CCHSB(color.getPrimaryColor());
-        color.setPrimaryColor(new CCHSB(position, current.getSaturation(), current.getBrightness(), current.getAlpha()).toRGB());
+        CCHSB current = new CCHSB(color.getRawColor());
+        color.setColor(new CCHSB(position, current.getSaturation(), current.getBrightness(), current.getAlpha()).toRGB());
         repaint();
 
     }
@@ -77,7 +77,7 @@ public class CCHSBHueBar extends JPanel {
     private void updateHSV() {
         if(!isDragging) {
             dirty = true;
-            position = new CCHSB(color.getPrimaryColor()).getHue();
+            position = new CCHSB(color.getRawColor()).getHue();
             repaint();
         }
     }
