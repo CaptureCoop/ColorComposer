@@ -13,7 +13,7 @@ public class MainTest {
         test.setLayout(new FlowLayout());
         test.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        CCGradientColor color = new CCGradientColor(Color.RED);
+        CCColor color = new CCColor(Color.WHITE);
 
         CCHSBPicker picker = new CCHSBPicker(color, false);
         picker.setPreferredSize(new Dimension(256, 256));
