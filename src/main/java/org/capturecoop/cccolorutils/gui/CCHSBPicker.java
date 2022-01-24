@@ -1,6 +1,6 @@
 package org.capturecoop.cccolorutils.gui;
 
-import org.capturecoop.cccolorutils.CCColor;
+import org.capturecoop.cccolorutils.CCGradientColor;
 import org.capturecoop.cccolorutils.CCColorUtils;
 import org.capturecoop.cccolorutils.CCHSB;
 import org.capturecoop.ccutils.math.CCVector2Float;
@@ -13,7 +13,7 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 
 public class CCHSBPicker extends JPanel {
-    private CCColor color;
+    private CCGradientColor color;
     private CCVector2Float position;
 
     private static final int MARGIN = 10;
@@ -23,7 +23,7 @@ public class CCHSBPicker extends JPanel {
     private BufferedImage buffer;
     private boolean dirty = true;
 
-    public CCHSBPicker(CCColor color, boolean alwaysGrab) {
+    public CCHSBPicker(CCGradientColor color, boolean alwaysGrab) {
         this.color = color;
         updatePosition();
         color.addChangeListener(changeEvent -> updatePosition());

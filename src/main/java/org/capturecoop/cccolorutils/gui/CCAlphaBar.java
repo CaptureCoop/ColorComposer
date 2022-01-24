@@ -1,6 +1,6 @@
 package org.capturecoop.cccolorutils.gui;
 
-import org.capturecoop.cccolorutils.CCColor;
+import org.capturecoop.cccolorutils.CCGradientColor;
 import org.capturecoop.cccolorutils.CCColorUtils;
 import org.capturecoop.ccutils.math.CCVector2Float;
 import org.capturecoop.ccutils.utils.CCMathUtils;
@@ -15,7 +15,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class CCAlphaBar extends JPanel {
-    private CCColor color;
+    private CCGradientColor color;
     private float position;
     private CCColorUtils.DIRECTION direction;
 
@@ -31,7 +31,7 @@ public class CCAlphaBar extends JPanel {
     private BufferedImage buffer;
     private boolean dirty = true;
 
-    public CCAlphaBar(CCColor color, CCColorUtils.DIRECTION direction, boolean alwaysGrab) {
+    public CCAlphaBar(CCGradientColor color, CCColorUtils.DIRECTION direction, boolean alwaysGrab) {
         this.color = color;
         this.direction = direction;
 

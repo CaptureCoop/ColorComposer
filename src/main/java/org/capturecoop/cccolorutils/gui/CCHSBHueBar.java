@@ -1,6 +1,6 @@
 package org.capturecoop.cccolorutils.gui;
 
-import org.capturecoop.cccolorutils.CCColor;
+import org.capturecoop.cccolorutils.CCGradientColor;
 import org.capturecoop.cccolorutils.CCColorUtils;
 import org.capturecoop.cccolorutils.CCHSB;
 import org.capturecoop.ccutils.math.CCVector2Float;
@@ -13,7 +13,7 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 
 public class CCHSBHueBar extends JPanel {
-    private CCColor color;
+    private CCGradientColor color;
     private float position;
     private final CCColorUtils.DIRECTION direction;
 
@@ -25,7 +25,7 @@ public class CCHSBHueBar extends JPanel {
     private BufferedImage buffer;
     private boolean dirty = true;
 
-    public CCHSBHueBar(CCColor color, CCColorUtils.DIRECTION direction, boolean alwaysGrab) {
+    public CCHSBHueBar(CCGradientColor color, CCColorUtils.DIRECTION direction, boolean alwaysGrab) {
         this.color = color;
         this.direction = direction;
         updateHSV();
