@@ -55,7 +55,7 @@ public class CCHSB {
 
     @Override
     public String toString() {
-        return CCStringUtils.format("CCHSB [hue: %c, saturation: %c, brightness: %c, alpha: %c]", hue, saturation, brightness, alpha);
+        return CCStringUtils.format("CCHSB[hue: %c, saturation: %c, brightness: %c, alpha: %c]", hue, saturation, brightness, alpha);
     }
 
     @Override
