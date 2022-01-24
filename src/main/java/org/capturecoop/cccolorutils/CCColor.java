@@ -1,5 +1,6 @@
 package org.capturecoop.cccolorutils;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.capturecoop.ccutils.math.CCVector2Float;
 import org.capturecoop.ccutils.math.CCVector2Int;
 import org.capturecoop.ccutils.utils.CCStringUtils;
@@ -243,5 +244,24 @@ public class CCColor {
         return CCStringUtils.format("CCColor[primaryColor: %c, secondaryColor: %c, point1: %c, point2: %c, isGradient: %c]", primaryColor, secondaryColor, point1, point2, isGradient);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if(this == o)
+            return true;
 
+        if(o == null || getClass() != o.getClass())
+            return false;
+
+        CCColor other = (CCColor) o;
+
+        return new EqualsBuilder()
+                .append(primaryColor.getRGB(), other.primaryColor.getRGB())
+                .append(primaryColor.getAlpha(), other.primaryColor.getAlpha())
+                .append(secondaryColor.getRGB(), other.secondaryColor.getRGB())
+                .append(secondaryColor.getAlpha(), other.secondaryColor.getAlpha())
+                .append(isGradient, other.isGradient)
+                .append(point1, other.point1)
+                .append(point2, other.point2)
+                .isEquals();
+    }
 }
