@@ -15,16 +15,16 @@ public class MainTest {
 
         CCColor color = new CCColor(Color.WHITE);
 
-        CCHSBPicker picker = new CCHSBPicker(color, false);
+        CCHSBPicker picker = new CCHSBPicker(color, true);
         picker.setPreferredSize(new Dimension(256, 256));
 
-        CCHSBHueBar hueBar = new CCHSBHueBar(color, CCColorUtils.DIRECTION.VERTICAL, false);
+        CCHSBHueBar hueBar = new CCHSBHueBar(color, CCColorUtils.DIRECTION.VERTICAL, true);
         hueBar.setPreferredSize(new Dimension(32, 256));
 
-        CCAlphaBar alphaBar = new CCAlphaBar(color, CCColorUtils.DIRECTION.VERTICAL, false);
+        CCAlphaBar alphaBar = new CCAlphaBar(color, CCColorUtils.DIRECTION.VERTICAL, true);
         alphaBar.setPreferredSize(new Dimension(32, 256));
 
-        CCAlphaBar alphaBar2 = new CCAlphaBar(color, CCColorUtils.DIRECTION.HORIZONTAL, false);
+        CCAlphaBar alphaBar2 = new CCAlphaBar(color, CCColorUtils.DIRECTION.HORIZONTAL, true);
         alphaBar2.setPreferredSize(new Dimension(256, 32));
 
         test.add(picker);
