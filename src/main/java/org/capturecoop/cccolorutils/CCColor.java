@@ -7,10 +7,11 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class CCColor {
     private Color color;
-    enum VALUE_TYPE {RED, GREEN, BLUE, ALPHA}
+    public enum VALUE_TYPE {RED, GREEN, BLUE, ALPHA}
     private final ArrayList<ChangeListener> listeners = new ArrayList<>();
 
     public CCColor(Color color) {
@@ -96,10 +97,10 @@ public class CCColor {
 
         for(VALUE_TYPE type : toCompare) {
             switch (type) {
-                case RED: if(color.getRed() != other.color.getRed()) return false;
-                case GREEN: if(color.getGreen() != other.color.getGreen()) return false;
-                case BLUE: if(color.getBlue() != other.color.getBlue()) return false;
-                case ALPHA: if(color.getAlpha() != other.color.getAlpha()) return false;
+                case RED: if(color.getRed() != other.color.getRed()) return false; break;
+                case GREEN: if(color.getGreen() != other.color.getGreen()) return false; break;
+                case BLUE: if(color.getBlue() != other.color.getBlue()) return false; break;
+                case ALPHA: if(color.getAlpha() != other.color.getAlpha()) return false; break;
             }
         }
         return true;

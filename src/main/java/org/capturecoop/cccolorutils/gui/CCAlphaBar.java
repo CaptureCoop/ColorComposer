@@ -27,7 +27,7 @@ public class CCAlphaBar extends JPanel {
 
     private boolean isDragging = false;
 
-
+    private CCColor lastRenderedColor;
     private BufferedImage buffer;
     private boolean dirty = true;
 
@@ -89,7 +89,9 @@ public class CCAlphaBar extends JPanel {
 
     private void updateAlpha() {
         if(!isDragging) {
-            dirty = true;
+            if(lastRenderedColor == null || !lastRenderedColor.advancedEquals(color, CCColor.VALUE_TYPE.RED, CCColor.VALUE_TYPE.GREEN, CCColor.VALUE_TYPE.BLUE)) {
+                dirty  = true;
+            }
             position = ((color.getAlpha() * 100F) / 255F) / 100F;
             repaint();
         }
@@ -115,7 +117,6 @@ public class CCAlphaBar extends JPanel {
         return null;
     }
 
-    //TODO: Currently we rerender the buffer everytime anything about the color is changed. This includes alpha... Save the last rendered color and check if only the alpha changed
     @Override
     public void paint(Graphics g) {
         if(buffer == null || !(buffer.getWidth() == getWidth() && buffer.getHeight() == getHeight())) {
@@ -151,5 +152,6 @@ public class CCAlphaBar extends JPanel {
         g.setColor(Color.GRAY);
         Rectangle rect = getSelectRect();
         g.fillRect(rect.x, rect.y, rect.width, rect.height);
+        lastRenderedColor = new CCColor(color);
     }
 }
