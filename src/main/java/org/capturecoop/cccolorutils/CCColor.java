@@ -16,6 +16,9 @@ public class CCColor {
     private CCVector2Float point2;
     private boolean isGradient = false;
 
+    enum COLOR_TYPE {PRIMARY, SECONDARY}
+    enum VALUE_TYPE {RED, GREEN, BLUE, ALPHA}
+
     private final ArrayList<ChangeListener> listeners = new ArrayList<>();
 
     public CCColor() {
