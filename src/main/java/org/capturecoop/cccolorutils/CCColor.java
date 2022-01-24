@@ -59,6 +59,12 @@ public class CCColor {
         primaryColor = new Color(r, g, b, a);
     }
 
+    public Color getColor(COLOR_TYPE type) {
+        if (type == COLOR_TYPE.SECONDARY)
+            return secondaryColor;
+        return primaryColor;
+    }
+
     public Color getPrimaryColor() {
         return primaryColor;
     }
