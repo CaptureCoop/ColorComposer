@@ -6,33 +6,38 @@ import org.capturecoop.cccolorutils.CCHSB;
 import org.capturecoop.ccutils.math.CCVector2Float;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class CCHSBPicker extends JPanel {
-    private CCColor color;
-    private CCVector2Float position;
-
-    private static final int MARGIN = 10;
+    private float hue;
+    private float saturation;
+    private float brightness;
 
     private boolean isDragging = false;
 
     private BufferedImage buffer;
     private boolean dirty = true;
 
-    public CCHSBPicker(CCColor color, boolean alwaysGrab) {
-        this.color = color;
-        updatePosition();
-        color.addChangeListener(changeEvent -> updatePosition());
+    private static final int MARGIN = 10;
+    private final ArrayList<ChangeListener> changeListeners = new ArrayList<>();
+
+    public CCHSBPicker(Color color, boolean alwaysGrab) {
+        CCHSB hsb = new CCHSB(color);
+        hue = hsb.getHue();
+        saturation = hsb.getSaturation();
+        brightness = hsb.getBrightness();
+
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
                 Rectangle rect = getSelectRect();
-                if(rect == null)
-                    return;
 
                 if(rect.contains(mouseEvent.getPoint()) && !alwaysGrab)
                     isDragging = true;
@@ -61,33 +66,26 @@ public class CCHSBPicker extends JPanel {
         float percentageY = (y * 100F) / getHeight();
         float pointX = new CCVector2Float(percentageX / 100F, 0).limitX(0F, 1F).getX();
         float pointY = new CCVector2Float(percentageY / 100F, 0).limitX(0F, 1F).getX();
-        CCHSB current = new CCHSB(color.getRawColor());
-        color.setColor(new CCHSB(current.getHue(), position.getX(), position.getY(), current.getAlpha()).toRGB());
         pointY = (pointY - 1) * - 1;
-        position = new CCVector2Float(pointX, pointY);
+        saturation = pointX;
+        brightness = pointY;
         repaint();
+
+        for(ChangeListener listener : changeListeners)
+            listener.stateChanged(new ChangeEvent(this));
     }
 
-    public Rectangle getSelectRect() {
-        int posX = (int)(position.getX() * getSizeX());
-        int posY = (int)((position.getY() - 1) * - 1 * getSizeY());
+    private Rectangle getSelectRect() {
+        int posX = (int)(saturation * getSizeX());
+        int posY = (int)((brightness - 1) * - 1 * getSizeY());
         return new Rectangle(posX, posY, MARGIN, MARGIN);
     }
 
-    public void updatePosition() {
-        if(!isDragging) {
-            dirty = true;
-            CCHSB hsb = new CCHSB(color.getRawColor());
-            position = new CCVector2Float(hsb.getSaturation(), hsb.getBrightness());
-            repaint();
-        }
-    }
-
-    public int getSizeX() {
+    private int getSizeX() {
         return getWidth() - MARGIN;
     }
 
-    public int getSizeY() {
+    private int getSizeY() {
         return getHeight() - MARGIN;
     }
 
@@ -109,7 +107,7 @@ public class CCHSBPicker extends JPanel {
         int sizeY = getSizeY();
         bufferGraphics.setColor(getBackground());
         bufferGraphics.fillRect(0, 0, getWidth(), getHeight());
-        bufferGraphics.drawImage(CCColorUtils.createHSVBox(getWidth(), getHeight(), new CCHSB(color.getRawColor()).getHue()), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
+        bufferGraphics.drawImage(CCColorUtils.createHSVBox(getWidth(), getHeight(), hue), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
         bufferGraphics.setColor(Color.BLACK);
         bufferGraphics.drawRect(MARGIN / 2 - 1, MARGIN / 2 - 1, sizeX + 1, sizeY + 1);
         bufferGraphics.setColor(Color.GRAY);
@@ -118,5 +116,34 @@ public class CCHSBPicker extends JPanel {
 
         bufferGraphics.dispose();
         g.drawImage(buffer, 0, 0, this);
+    }
+
+    public void addChangeListener(ChangeListener listener) {
+        //These only fire on changes made by the user
+        changeListeners.add(listener);
+    }
+
+    public float getHue() {
+        return hue;
+    }
+
+    public void setHue(float hue) {
+        this.hue = hue;
+    }
+
+    public float getSaturation() {
+        return saturation;
+    }
+
+    public void setSaturation(float saturation) {
+        this.saturation = saturation;
+    }
+
+    public float getBrightness() {
+        return brightness;
+    }
+
+    public void setBrightness(float brightness) {
+        this.brightness = brightness;
     }
 }
