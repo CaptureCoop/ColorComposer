@@ -1,22 +1,24 @@
 package org.capturecoop.cccolorutils.gui;
 
-import org.capturecoop.cccolorutils.CCColor;
 import org.capturecoop.cccolorutils.CCColorUtils;
 import org.capturecoop.ccutils.math.CCVector2Float;
-import org.capturecoop.ccutils.utils.CCMathUtils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class CCAlphaBar extends JPanel {
-    private CCColor color;
-    private float position;
+    private Color backgroundColor;
+    private float alpha;
+
     private final CCColorUtils.DIRECTION direction;
 
     private final static int MARGIN = 10;
@@ -27,13 +29,14 @@ public class CCAlphaBar extends JPanel {
 
     private boolean isDragging = false;
 
-    private CCColor lastRenderedColor;
     private BufferedImage buffer;
     private boolean dirty = true;
+    private final ArrayList<ChangeListener> changeListeners = new ArrayList<>();
 
-    public CCAlphaBar(CCColor color, CCColorUtils.DIRECTION direction, boolean alwaysGrab) {
-        this.color = color;
+    public CCAlphaBar(Color color, CCColorUtils.DIRECTION direction, boolean alwaysGrab) {
+        backgroundColor = color;
         this.direction = direction;
+        alpha = color.getAlpha() / 255F;
 
         if(gridImage == null) {
             try {
@@ -43,8 +46,6 @@ public class CCAlphaBar extends JPanel {
             }
         }
 
-        updateAlpha();
-        color.addChangeListener(e -> updateAlpha());
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
@@ -81,20 +82,11 @@ public class CCAlphaBar extends JPanel {
             size = getWidth();
         }
         float percentage = (pos * 100F) / size;
-        position = new CCVector2Float(percentage / 100F, 0).limitX(0, 1).getX();
-        Color oldColor = color.getRawColor();
-        color.setColor(new Color(oldColor.getRed(), oldColor.getGreen(), oldColor.getBlue(), CCMathUtils.clampInt((int)(position * 255), 0, 255)));
+        alpha = new CCVector2Float(percentage / 100F, 0).limitX(0, 1).getX();
         repaint();
-    }
 
-    private void updateAlpha() {
-        if(!isDragging) {
-            if(lastRenderedColor == null || !lastRenderedColor.advancedEquals(color, CCColor.VALUE_TYPE.RED, CCColor.VALUE_TYPE.GREEN, CCColor.VALUE_TYPE.BLUE)) {
-                dirty  = true;
-            }
-            position = ((color.getAlpha() * 100F) / 255F) / 100F;
-            repaint();
-        }
+        for(ChangeListener listener : changeListeners)
+            listener.stateChanged(new ChangeEvent(this));
     }
 
     private int getSizeX() {
@@ -108,10 +100,10 @@ public class CCAlphaBar extends JPanel {
     private Rectangle getSelectRect() {
         switch(direction) {
             case VERTICAL:
-                int yPos = (int) (getSizeY() / (1 / position)) + MARGIN / 2;
+                int yPos = (int) (getSizeY() / (1 / alpha)) + MARGIN / 2;
                 return new Rectangle(SEL_MARGIN_OFF, yPos - SEL_MARGIN, getWidth() - SEL_MARGIN_OFF * 2, SEL_MARGIN * 2);
             case HORIZONTAL:
-                int xPos = (int) (getSizeX() / (1 / position)) + MARGIN / 2;
+                int xPos = (int) (getSizeX() / (1 / alpha)) + MARGIN / 2;
                 return new Rectangle(xPos - SEL_MARGIN, SEL_MARGIN_OFF, SEL_MARGIN * 2, getHeight() - SEL_MARGIN_OFF * 2);
         }
         return null;
@@ -142,7 +134,7 @@ public class CCAlphaBar extends JPanel {
                     }
                 }
             }
-            bufferGraphics.drawImage(CCColorUtils.createAlphaBar(color.getRawColor(), sizeX, sizeY, direction), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
+            bufferGraphics.drawImage(CCColorUtils.createAlphaBar(backgroundColor, sizeX, sizeY, direction), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
             bufferGraphics.dispose();
             dirty = false;
         }
@@ -152,6 +144,26 @@ public class CCAlphaBar extends JPanel {
         g.setColor(Color.GRAY);
         Rectangle rect = getSelectRect();
         g.fillRect(rect.x, rect.y, rect.width, rect.height);
-        lastRenderedColor = new CCColor(color);
+    }
+
+    public void addChangeListener(ChangeListener listener) {
+        //These only fire on changes made by the user
+        changeListeners.add(listener);
+    }
+
+    public void setBackgroundColor(Color color) {
+        backgroundColor = color;
+        dirty = true;
+        repaint();
+    }
+
+    public void setAlpha(int alpha) {
+        this.alpha = alpha / 255F;
+        dirty = true;
+        repaint();
+    }
+
+    public int getAlpha() {
+        return (int) (alpha * 255F);
     }
 }

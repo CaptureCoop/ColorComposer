@@ -1,6 +1,5 @@
 package org.capturecoop.cccolorutils.gui;
 
-import org.capturecoop.cccolorutils.CCColor;
 import org.capturecoop.cccolorutils.CCColorUtils;
 import org.capturecoop.cccolorutils.CCHSB;
 import org.capturecoop.ccutils.math.CCVector2Float;
@@ -129,6 +128,8 @@ public class CCHSBPicker extends JPanel {
 
     public void setHue(float hue) {
         this.hue = hue;
+        dirty = true;
+        repaint();
     }
 
     public float getSaturation() {
@@ -137,6 +138,8 @@ public class CCHSBPicker extends JPanel {
 
     public void setSaturation(float saturation) {
         this.saturation = saturation;
+        dirty = true;
+        repaint();
     }
 
     public float getBrightness() {
@@ -145,5 +148,11 @@ public class CCHSBPicker extends JPanel {
 
     public void setBrightness(float brightness) {
         this.brightness = brightness;
+        dirty = true;
+        repaint();
+    }
+
+    public Color getAsColor() {
+        return new CCHSB(hue, saturation, brightness).toRGB();
     }
 }
