@@ -33,11 +33,16 @@ public class CCColor {
     public void setAlpha(int alpha) {
         Color oldColor = color;
         color = new Color(oldColor.getRed(), oldColor.getGreen(), oldColor.getBlue(), alpha);
+        alertChangeListeners();
+    }
+
+    public void setColor(Color color, int alpha) {
+        this.color = new Color(color.getRed(), color.getBlue(), color.getGreen(), alpha);
+        alertChangeListeners();
     }
 
     public void setColor(Color color) {
-        this.color = color;
-        alertChangeListeners();
+        setColor(color, color.getAlpha());
     }
 
     private void alertChangeListeners() {
@@ -76,7 +81,7 @@ public class CCColor {
 
     @Override
     public String toString() {
-        return CCStringUtils.format("CCColor[R: %c, G: %c, B: %c]", color.getRed(), color.getGreen(), color.getBlue());
+        return CCStringUtils.format("CCColor[R: %c, G: %c, B: %c, A: %c]", color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
 
     public boolean advancedEquals(Object o, VALUE_TYPE... toCompare) {
