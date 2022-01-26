@@ -6,15 +6,17 @@ import org.capturecoop.cccolorutils.CCHSB;
 import org.capturecoop.ccutils.math.CCVector2Float;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class CCHSBHueBar extends JPanel {
-    private CCColor color;
-    private float position;
+    private float hue;
     private final CCColorUtils.DIRECTION direction;
 
     private final static int MARGIN = 10;
@@ -23,12 +25,11 @@ public class CCHSBHueBar extends JPanel {
     private boolean isDragging = false;
 
     private BufferedImage buffer;
+    private final ArrayList<ChangeListener> changeListeners = new ArrayList<>();
 
-    public CCHSBHueBar(CCColor color, CCColorUtils.DIRECTION direction, boolean alwaysGrab) {
-        this.color = color;
+    public CCHSBHueBar(Color color, CCColorUtils.DIRECTION direction, boolean alwaysGrab) {
+        hue = new CCHSB(color).getHue();
         this.direction = direction;
-        updateHSV();
-        color.addChangeListener(e -> updateHSV());
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
@@ -65,18 +66,11 @@ public class CCHSBHueBar extends JPanel {
             size = getWidth();
         }
         float percentage = (pos * 100F) / size;
-        position = new CCVector2Float(percentage / 100F, 0).limitX(0.01F, 0.99F).getX();
-        CCHSB current = new CCHSB(color.getRawColor());
-        color.setColor(new CCHSB(position, current.getSaturation(), current.getBrightness(), current.getAlpha()).toRGB());
+        hue = new CCVector2Float(percentage / 100F, 0).limitX(0.01F, 0.99F).getX();
         repaint();
 
-    }
-
-    private void updateHSV() {
-        if(!isDragging) {
-            position = new CCHSB(color.getRawColor()).getHue();
-            repaint();
-        }
+        for(ChangeListener listener : changeListeners)
+            listener.stateChanged(new ChangeEvent(this));
     }
 
     private int getSizeX() {
@@ -90,10 +84,10 @@ public class CCHSBHueBar extends JPanel {
     private Rectangle getSelectRect() {
         switch(direction) {
             case VERTICAL:
-                int yPos = (int) (getSizeY() / (1 / position)) + MARGIN / 2;
+                int yPos = (int) (getSizeY() / (1 / hue)) + MARGIN / 2;
                 return new Rectangle(SEL_MARGIN_OFF, yPos - SEL_MARGIN, getWidth() - SEL_MARGIN_OFF * 2, SEL_MARGIN * 2);
             case HORIZONTAL:
-                int xPos = (int) (getSizeX() / (1 / position)) + MARGIN / 2;
+                int xPos = (int) (getSizeX() / (1 / hue)) + MARGIN / 2;
                 return new Rectangle(xPos - SEL_MARGIN, SEL_MARGIN_OFF, SEL_MARGIN * 2, getHeight() - SEL_MARGIN_OFF * 2);
         }
         return null;
@@ -119,5 +113,19 @@ public class CCHSBHueBar extends JPanel {
         g.setColor(Color.GRAY);
         Rectangle rect = getSelectRect();
         g.fillRect(rect.x, rect.y, rect.width, rect.height);
+    }
+
+    public void addChangeListener(ChangeListener listener) {
+        //These only fire on changes made by the user
+        changeListeners.add(listener);
+    }
+
+    public float getHue() {
+        return hue;
+    }
+
+    public void setHue(float hue) {
+        this.hue = hue;
+        repaint();
     }
 }
