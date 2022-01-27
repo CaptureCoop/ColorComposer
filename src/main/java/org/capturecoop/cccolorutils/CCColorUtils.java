@@ -89,6 +89,18 @@ public class CCColorUtils {
         return image;
     }
 
+    public static Color setColorRed(Color c, int red) {
+        return new Color(red, c.getGreen(), c.getBlue(), c.getAlpha());
+    }
+
+    public static Color setColorGreen(Color c, int green) {
+        return new Color(c.getRed(), green, c.getBlue(), c.getAlpha());
+    }
+
+    public static Color setColorBlue(Color c, int blue) {
+        return new Color(c.getRed(), c.getGreen(), blue, c.getAlpha());
+    }
+
     public static Color setColorAlpha(Color c, int alpha) {
         return new Color(c.getRed(), c.getGreen(), c.getBlue(), alpha);
     }
