@@ -1,4 +1,4 @@
-package org.capturecoop.cccolorutils.gui;
+package org.capturecoop.cccolorutils.gui.parts;
 
 import org.capturecoop.cccolorutils.CCColor;
 import org.capturecoop.cccolorutils.CCColorUtils;

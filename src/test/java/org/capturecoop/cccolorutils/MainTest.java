@@ -1,12 +1,10 @@
 package org.capturecoop.cccolorutils;
 
-import org.capturecoop.cccolorutils.gui.CCAlphaBar;
-import org.capturecoop.cccolorutils.gui.CCHSBHueBar;
-import org.capturecoop.cccolorutils.gui.CCHSBPicker;
+import org.capturecoop.cccolorutils.gui.parts.CCAlphaBar;
+import org.capturecoop.cccolorutils.gui.parts.CCHSBHueBar;
+import org.capturecoop.cccolorutils.gui.parts.CCHSBPicker;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 
 public class MainTest {
