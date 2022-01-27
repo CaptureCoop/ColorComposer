@@ -45,6 +45,7 @@ public class CCColorChooserSetterPanel extends JPanel {
         //Add sliders
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.NORTH;
         gbc.insets = new Insets(5, 0, 5, 0);
 
         gbc.gridx = 0;
