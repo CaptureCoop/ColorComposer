@@ -47,6 +47,7 @@ public class CCColorChooserSetterPanel extends JPanel {
         //Add sliders
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(5, 0, 5, 0);
 
         gbc.gridx = 0;
         sliders.add(new JLabel("Red"), gbc);
