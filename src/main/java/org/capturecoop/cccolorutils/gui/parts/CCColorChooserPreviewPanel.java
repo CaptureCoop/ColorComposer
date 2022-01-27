@@ -23,15 +23,11 @@ public class CCColorChooserPreviewPanel extends JPanel{
         if(useGradient)
             panelGradient = new CCColorChooserGradientPreview(colorChooser, previewBackground);
 
-        colorChooser.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                /*if(tabPane.getSelectedIndex() == 0)
-                    colorChooser.getColor().setPrimaryColor(colorChooser.getColor());
-                else if(tabPane.getSelectedIndex() == 1)
-                    panelGradient.setColorAuto(colorChooser.getJcc().getColor());*/
-                //TODO: What is this?
-            }
+        colorChooser.getSetterPanel().addChangeListener(e -> {
+            if(tabPane.getSelectedIndex() == 0)
+                colorChooser.getColor().setPrimaryColor(colorChooser.getSetterPanel().getColor());
+            else if(tabPane.getSelectedIndex() == 1)
+                panelGradient.setColorAuto(colorChooser.getSetterPanel().getColor());
         });
         tabPane.addTab("Single color", panelSingle);
         if(useGradient)

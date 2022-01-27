@@ -21,8 +21,8 @@ public class CCColorChooser extends JFrame {
     public CCColorChooser(CCColor color, String title, int x, int y, boolean useGradient, BufferedImage backgroundImage, BufferedImage icon) {
         instance = this;
         this.color = color;
+        setterPanel = new CCColorChooserSetterPanel(color.getPrimaryColor());
         previewPanel = new CCColorChooserPreviewPanel(this, useGradient, backgroundImage);
-        setterPanel = new CCColorChooserSetterPanel();
 
         setTitle(title);
         if(icon != null) setIconImage(icon);
