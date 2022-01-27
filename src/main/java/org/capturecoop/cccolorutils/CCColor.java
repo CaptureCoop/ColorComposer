@@ -20,6 +20,9 @@ public class CCColor {
     private final ArrayList<ChangeListener> listeners = new ArrayList<>();
     enum COLOR_TYPE {PRIMARY, SECONDARY}
 
+    public static final CCVector2Float POINT_PRIMARY_DEFAULT = new CCVector2Float(0, 0);
+    public static final CCVector2Float POINT_SECONDARY_DEFAULT = new CCVector2Float(1, 1);
+
     public CCColor(Color color) {
         this.primaryColor = color;
     }
@@ -133,13 +136,12 @@ public class CCColor {
             return primaryColor;
         }
 
-        if(secondaryColor == null)
-            secondaryColor = primaryColor;
+        ensureSecondaryColor();
 
         if(point1 == null)
-            point1 = new CCVector2Float(0f, 0f);
+            point1 = POINT_PRIMARY_DEFAULT;
         if(point2 == null)
-            point2 = new CCVector2Float(1f, 1f);
+            point2 = POINT_SECONDARY_DEFAULT;
 
         CCVector2Int point1int = new CCVector2Int(point1.getX() * width, point1.getY() * height);
         CCVector2Int point2int = new CCVector2Int(point2.getX() * width, point2.getY() * height);
@@ -165,7 +167,7 @@ public class CCColor {
         if(primaryColor.getAlpha() != 255)
             string += "_a" + primaryColor.getAlpha();
 
-        if(point1 != null)
+        if(point1 != null && !point1.equals(POINT_PRIMARY_DEFAULT))
             string += "_x" + point1.getX() + "_y" + point1.getY();
 
         string += "_G" + isGradient();
@@ -174,7 +176,7 @@ public class CCColor {
             string += "___" + CCColorUtils.rgb2hex(secondaryColor);
             if(secondaryColor.getAlpha() != 255)
                 string += "_a" + secondaryColor.getAlpha();
-            if (point2 != null)
+            if (point2 != null && !point2.equals(POINT_SECONDARY_DEFAULT))
                 string += "_x" + point2.getX() + "_y" + point2.getY();
         }
         return string;
@@ -229,7 +231,13 @@ public class CCColor {
 
     public void setIsGradient(boolean bool) {
         isGradient = bool;
+        ensureSecondaryColor();
         alertChangeListeners();
+    }
+
+    public void ensureSecondaryColor() {
+        if(secondaryColor == null)
+            secondaryColor = primaryColor.brighter();
     }
 
     public boolean isGradient() {

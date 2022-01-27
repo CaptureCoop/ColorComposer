@@ -112,9 +112,6 @@ public class CCColorChooserGradientPreview extends JPanel {
 
             //TODO: Weird bug when resizing window, smaller to larger destroys gradient preview
             //TODO: Found it! Render the preview as its own BufferedImage that we resize whenever you stop resizing the window :) that will fix it!
-            if(color.getSecondaryColor() == null) {
-                color.setSecondaryColor(color.getPrimaryColor().brighter());
-            }
 
             Graphics2D previewGraphics = (Graphics2D) previewBuffer.getGraphics();
 
