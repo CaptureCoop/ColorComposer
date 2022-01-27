@@ -56,7 +56,7 @@ public class CCColorChooserSetterPanel extends JPanel {
 
         //Add Listeners
         picker.addChangeListener(e -> {
-            setColor(picker.getAsColor(), true, false);
+            setColor(CCColorUtils.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
             alphaBar.setBackgroundColor(color);
             updateSliderListeners();
         });
