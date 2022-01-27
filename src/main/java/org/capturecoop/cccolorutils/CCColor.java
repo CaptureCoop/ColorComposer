@@ -248,9 +248,11 @@ public class CCColor {
         return secondaryColor != null;
     }
 
+
+
     @Override
     public String toString() {
-        return CCStringUtils.format("CCGradientColor[primaryColor: %c, secondaryColor: %c, point1: %c, point2: %c, isGradient: %c]", primaryColor, secondaryColor, point1, point2, isGradient);
+        return CCStringUtils.format("CCGradientColor[primaryColor: %c, secondaryColor: %c, point1: %c, point2: %c, isGradient: %c]", CCColorUtils.toStringColor(primaryColor),  CCColorUtils.toStringColor(secondaryColor), point1, point2, isGradient);
     }
 
     @Override

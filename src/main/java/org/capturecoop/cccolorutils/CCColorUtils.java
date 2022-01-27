@@ -1,5 +1,7 @@
 package org.capturecoop.cccolorutils;
 
+import org.capturecoop.ccutils.utils.CCStringUtils;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -87,6 +89,12 @@ public class CCColorUtils {
 
         g.dispose();
         return image;
+    }
+
+    public static String toStringColor(Color c) {
+        if(c == null)
+            return null;
+        return CCStringUtils.format("Color[r: %c, g: %c, b: %c, a: %c]", c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
     }
 
     public static Color setColorRed(Color c, int red) {
