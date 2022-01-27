@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class CCColorChooserSetterPanel extends JPanel {
     private Color color;
     private ArrayList<ChangeListener> changeListeners = new ArrayList<>();
+    private enum SLIDER_OPTION {RGB, HSB}
 
     public CCColorChooserSetterPanel(Color color) {
         this.color = color;
@@ -37,32 +38,36 @@ public class CCColorChooserSetterPanel extends JPanel {
 
         //Add sliders
         JPanel sliderPanel = new JPanel(new GridBagLayout());
+        setupSliders(SLIDER_OPTION.RGB, sliderPanel);
+
+        JPanel optionPanel = new JPanel();
+        optionPanel.add(sliderPanel);
+
+        add(visual);
+        add(optionPanel);
+    }
+
+    public void setupSliders(SLIDER_OPTION type, JPanel panel) {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 0, 5, 0);
 
-        gbc.gridx = 0;
-        sliderPanel.add(new JLabel("Red"), gbc);
-        gbc.gridx = 1;
-        sliderPanel.add(createSlider(e -> System.out.println("Red")), gbc);
+        panel.removeAll();
 
         gbc.gridx = 0;
-        sliderPanel.add(new JLabel("Green"), gbc);
+        panel.add(new JLabel("Red"), gbc);
         gbc.gridx = 1;
-        sliderPanel.add(createSlider(e -> System.out.println("Green")), gbc);
+        panel.add(createSlider(e -> System.out.println("Red")), gbc);
 
         gbc.gridx = 0;
-        sliderPanel.add(new JLabel("Blue"), gbc);
+        panel.add(new JLabel("Green"), gbc);
         gbc.gridx = 1;
-        sliderPanel.add(createSlider(e -> System.out.println("Blue")), gbc);
+        panel.add(createSlider(e -> System.out.println("Green")), gbc);
 
-        GridBagConstraints gbcc = new GridBagConstraints();
-        gbcc.anchor = GridBagConstraints.NORTH;
-
-        JPanel sliderTempPanel = new JPanel();
-        sliderTempPanel.add(sliderPanel);
-
-        add(visual);
-        add(sliderTempPanel);
+        gbc.gridx = 0;
+        panel.add(new JLabel("Blue"), gbc);
+        gbc.gridx = 1;
+        panel.add(createSlider(e -> System.out.println("Blue")), gbc);
+        panel.revalidate();
     }
 
     public JSlider createSlider(ChangeListener onChange) {
