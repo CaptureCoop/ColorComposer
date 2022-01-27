@@ -229,6 +229,7 @@ public class CCColor {
 
     public void setIsGradient(boolean bool) {
         isGradient = bool;
+        alertChangeListeners();
     }
 
     public boolean isGradient() {
