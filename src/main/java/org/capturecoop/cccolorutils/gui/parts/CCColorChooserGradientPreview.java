@@ -48,11 +48,11 @@ public class CCColorChooserGradientPreview extends JPanel {
                 if(point1Rect != null && point1Rect.contains(mouseEvent.getPoint())) {
                     pointControlled = 0;
                     lastPointControlled = 0;
-                    //colorChooser.getJcc().setColor(color.getRawColor());
+                    colorChooser.getSetterPanel().setColor(color.getPrimaryColor(), false, true);
                 } else if(point2Rect != null && point2Rect.contains(mouseEvent.getPoint())) {
                     pointControlled = 1;
                     lastPointControlled = 1;
-                    //colorChooser.getJcc().setColor(color.getRawColor());
+                    colorChooser.getSetterPanel().setColor(color.getSecondaryColor(), false, true);
                 }
             }
 
