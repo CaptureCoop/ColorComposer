@@ -88,4 +88,21 @@ public class CCColorUtils {
         g.dispose();
         return image;
     }
+
+    public static Color setColorAlpha(Color c, int alpha) {
+        return new Color(c.getRed(), c.getGreen(), c.getBlue(), alpha);
+    }
+
+    public static void drawRect(Graphics g, Rectangle rect) {
+        g.drawRect(rect.x, rect.y, rect.width, rect.height);
+    }
+
+    public static void fillRect(Graphics g, Rectangle rect) {
+        g.fillRect(rect.x, rect.y, rect.width, rect.height);
+    }
+
+    public static Color getContrastColor(Color color) {
+        double y = (299f * color.getRed() + 587 * color.getGreen() + 114 * color.getBlue()) / 1000;
+        return y >= 128 ? Color.black : Color.white;
+    }
 }
