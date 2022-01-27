@@ -12,9 +12,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CCColorChooserSetterPanel extends JPanel {
     private Color color;
-    private ArrayList<ChangeListener> changeListeners = new ArrayList<>();
-    private ArrayList<ChangeListener> sliderUpdateListeners = new ArrayList<>();
-    private ArrayList<ChangeListener> visualUpdateListeners = new ArrayList<>();
+    private final ArrayList<ChangeListener> changeListeners = new ArrayList<>();
+    private final ArrayList<ChangeListener> sliderUpdateListeners = new ArrayList<>();
+    private final ArrayList<ChangeListener> visualUpdateListeners = new ArrayList<>();
     private enum SLIDER_OPTION {RGB, HSB}
 
     public CCColorChooserSetterPanel(Color startColor) {
@@ -56,7 +56,7 @@ public class CCColorChooserSetterPanel extends JPanel {
 
         //Add Listeners
         picker.addChangeListener(e -> {
-            setColor(picker.getAsColor());
+            setColor(picker.getAsColor(), true, false);
             alphaBar.setBackgroundColor(color);
             updateSliderListeners();
         });
@@ -65,12 +65,12 @@ public class CCColorChooserSetterPanel extends JPanel {
             float hue = hueBar.getHue();
             picker.setHue(hue);
             alphaBar.setBackgroundColor(color);
-            setColor(picker.getAsColor());
+            setColor(picker.getAsColor(), true, false);
             updateSliderListeners();
         });
 
         alphaBar.addChangeListener(e -> {
-            setColor(CCColorUtils.setColorAlpha(color, alphaBar.getAlpha()));
+            setColor(CCColorUtils.setColorAlpha(color, alphaBar.getAlpha()), true, false);
             updateSliderListeners();
         });
 
@@ -98,7 +98,7 @@ public class CCColorChooserSetterPanel extends JPanel {
         JSlider redSlider = createSlider(0, 255);
         redSlider.addChangeListener(e -> {
             if(!isSetter.get()) {
-                setColor(CCColorUtils.setColorRed(color, redSlider.getValue()));
+                setColor(CCColorUtils.setColorRed(color, redSlider.getValue()), true, false);
                 updateVisualListeners();
             }
         });
@@ -110,7 +110,7 @@ public class CCColorChooserSetterPanel extends JPanel {
         JSlider greenSlider = createSlider(0, 255);
         greenSlider.addChangeListener(e -> {
             if(!isSetter.get()) {
-                setColor(CCColorUtils.setColorGreen(color, greenSlider.getValue()));
+                setColor(CCColorUtils.setColorGreen(color, greenSlider.getValue()), true, false);
                 updateVisualListeners();
             }
         });
@@ -122,7 +122,7 @@ public class CCColorChooserSetterPanel extends JPanel {
         JSlider blueSlider = createSlider(0, 255);
         blueSlider.addChangeListener(e -> {
             if(!isSetter.get()) {
-                setColor(CCColorUtils.setColorBlue(color, blueSlider.getValue()));
+                setColor(CCColorUtils.setColorBlue(color, blueSlider.getValue()), true, false);
                 updateVisualListeners();
             }
         });
@@ -134,7 +134,7 @@ public class CCColorChooserSetterPanel extends JPanel {
         JSlider alphaSlider = createSlider(0, 255);
         alphaSlider.addChangeListener(e -> {
             if(!isSetter.get()) {
-                setColor(CCColorUtils.setColorAlpha(color, alphaSlider.getValue()));
+                setColor(CCColorUtils.setColorAlpha(color, alphaSlider.getValue()), true, false);
                 updateVisualListeners();
             }
         });
@@ -172,8 +172,19 @@ public class CCColorChooserSetterPanel extends JPanel {
         changeListeners.add(listener);
     }
 
-    public void setColor(Color color) {
+    public void setColor(Color color, boolean alertListeners, boolean updateComponents) {
         this.color = color;
+        if(alertListeners)
+            for(ChangeListener listener : changeListeners)
+                listener.stateChanged(new ChangeEvent(this));
+
+        if (updateComponents) {
+            for(ChangeListener listener : visualUpdateListeners)
+                listener.stateChanged(new ChangeEvent(this));
+
+            for(ChangeListener listener : sliderUpdateListeners)
+                listener.stateChanged(new ChangeEvent(this));
+        }
     }
 
     public Color getColor() {
