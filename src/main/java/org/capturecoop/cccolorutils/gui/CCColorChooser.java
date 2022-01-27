@@ -37,9 +37,7 @@ public class CCColorChooser extends JFrame {
 
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-        //colorPanel.add(jcc);
-
-        mainPanel.add(new CCColorChooserPreviewPanel(this, useGradient, previewBackground));
+        mainPanel.add(previewPanel);
         mainPanel.add(setterPanel);
         mainPanel.add(submitButtonPanel);
 
