@@ -26,18 +26,16 @@ public class CCColorChooserSetterPanel extends JPanel {
         hueBar.setPreferredSize(new Dimension(32, 256));
         alphaBar.setPreferredSize(new Dimension(32, 256));
 
-        //Main Panel
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(0, 2));
+        setLayout(new GridLayout(0, 2));
 
         //Visual elements
         JPanel visual = new JPanel();
-        panel.add(visual);
+        add(visual);
 
         //Sliders
         JPanel sliders = new JPanel();
         sliders.setLayout(new GridBagLayout());
-        panel.add(sliders);
+        add(sliders);
 
         //Add visuals
         visual.add(picker);
@@ -46,25 +44,23 @@ public class CCColorChooserSetterPanel extends JPanel {
 
         //Add sliders
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.BOTH;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 0, 5, 0);
 
         gbc.gridx = 0;
         sliders.add(new JLabel("Red"), gbc);
-        gbc.gridx++;
+        gbc.gridx = 1;
         sliders.add(new JSlider(), gbc);
 
         gbc.gridx = 0;
         sliders.add(new JLabel("Green"), gbc);
-        gbc.gridx++;
+        gbc.gridx = 1;
         sliders.add(new JSlider(), gbc);
 
         gbc.gridx = 0;
         sliders.add(new JLabel("Blue"), gbc);
-        gbc.gridx++;
+        gbc.gridx = 1;
         sliders.add(new JSlider(), gbc);
-
-        add(panel);
     }
 
     public void addChangeListener(ChangeListener listener) {
