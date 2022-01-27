@@ -13,10 +13,10 @@ import java.util.ArrayList;
 public class CCColorChooser extends JFrame {
     private final CCColorChooser instance;
     private CCColor color;
-    private CCColorChooserPreviewPanel previewPanel;
-    private CCColorChooserSetterPanel setterPanel;
+    private final CCColorChooserPreviewPanel previewPanel;
+    private final CCColorChooserSetterPanel setterPanel;
 
-    private ArrayList<ChangeListener> changeListeners = new ArrayList<>();
+    private final ArrayList<ChangeListener> changeListeners = new ArrayList<>();
 
     public CCColorChooser(CCColor color, String title, int x, int y, boolean useGradient, BufferedImage backgroundImage, BufferedImage icon) {
         instance = this;
@@ -53,10 +53,6 @@ public class CCColorChooser extends JFrame {
         pack();
         setLocation(x - getWidth()/2, y - getHeight()/2);
         setVisible(true);
-    }
-
-    public CCColorChooserPreviewPanel getPreviewPanel() {
-        return previewPanel;
     }
 
     public CCColorChooserSetterPanel getSetterPanel() {
