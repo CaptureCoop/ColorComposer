@@ -1,6 +1,8 @@
 package org.capturecoop.cccolorutils.gui.parts;
 
 import org.capturecoop.cccolorutils.CCColor;
+import org.capturecoop.cccolorutils.CCColorUtils;
+import org.capturecoop.cccolorutils.CCHSB;
 
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
@@ -13,6 +15,55 @@ public class CCColorChooserSetterPanel extends JPanel {
 
     public CCColorChooserSetterPanel(Color color) {
         this.color = color;
+
+        //Picker elements
+        CCHSBPicker picker = new CCHSBPicker(color, true);
+        CCHSBHueBar hueBar = new CCHSBHueBar(color, CCColorUtils.DIRECTION.VERTICAL, true);
+        CCAlphaBar alphaBar = new CCAlphaBar(color, CCColorUtils.DIRECTION.VERTICAL, true);
+
+        //Set size
+        picker.setPreferredSize(new Dimension(256, 256));
+        hueBar.setPreferredSize(new Dimension(32, 256));
+        alphaBar.setPreferredSize(new Dimension(32, 256));
+
+        //Main Panel
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(0, 2));
+
+        //Visual elements
+        JPanel visual = new JPanel();
+        panel.add(visual);
+
+        //Sliders
+        JPanel sliders = new JPanel();
+        sliders.setLayout(new GridBagLayout());
+        panel.add(sliders);
+
+        //Add visuals
+        visual.add(picker);
+        visual.add(hueBar);
+        visual.add(alphaBar);
+
+        //Add sliders
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+
+        gbc.gridx = 0;
+        sliders.add(new JLabel("Red"), gbc);
+        gbc.gridx++;
+        sliders.add(new JSlider(), gbc);
+
+        gbc.gridx = 0;
+        sliders.add(new JLabel("Green"), gbc);
+        gbc.gridx++;
+        sliders.add(new JSlider(), gbc);
+
+        gbc.gridx = 0;
+        sliders.add(new JLabel("Blue"), gbc);
+        gbc.gridx++;
+        sliders.add(new JSlider(), gbc);
+
+        add(panel);
     }
 
     public void addChangeListener(ChangeListener listener) {

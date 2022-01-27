@@ -31,7 +31,6 @@ public class CCColorChooser extends JFrame {
 
     public void init(int x, int y, boolean useGradient, BufferedImage previewBackground) {
         JPanel mainPanel = new JPanel();
-        JPanel colorPanel = new JPanel();
         JPanel submitButtonPanel = new JPanel();
         JButton submit = new JButton("Okay");
         submit.addActionListener(e -> instance.close());
@@ -41,7 +40,7 @@ public class CCColorChooser extends JFrame {
         //colorPanel.add(jcc);
 
         mainPanel.add(new CCColorChooserPreviewPanel(this, useGradient, previewBackground));
-        mainPanel.add(colorPanel);
+        mainPanel.add(setterPanel);
         mainPanel.add(submitButtonPanel);
 
         add(mainPanel);
