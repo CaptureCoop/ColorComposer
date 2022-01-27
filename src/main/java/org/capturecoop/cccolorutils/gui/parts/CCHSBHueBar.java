@@ -66,7 +66,7 @@ public class CCHSBHueBar extends JPanel {
             size = getWidth();
         }
         float percentage = (pos * 100F) / size;
-        hue = new CCVector2Float(percentage / 100F, 0).limitX(0.01F, 0.99F).getX();
+        hue = new CCVector2Float(percentage / 100F, 0).limitX(0.0001F, 0.9999F).getX();
         repaint();
 
         for(ChangeListener listener : changeListeners)
