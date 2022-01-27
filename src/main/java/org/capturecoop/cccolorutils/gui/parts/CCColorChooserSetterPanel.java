@@ -5,6 +5,7 @@ import org.capturecoop.cccolorutils.CCColorUtils;
 import org.capturecoop.cccolorutils.CCHSB;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.util.ArrayList;
@@ -28,40 +29,47 @@ public class CCColorChooserSetterPanel extends JPanel {
 
         setLayout(new GridLayout(0, 2));
 
-        //Visual elements
-        JPanel visual = new JPanel();
-        add(visual);
-
-        //Sliders
-        JPanel sliders = new JPanel();
-        sliders.setLayout(new GridBagLayout());
-        add(sliders);
-
         //Add visuals
+        JPanel visual = new JPanel();
         visual.add(picker);
         visual.add(hueBar);
         visual.add(alphaBar);
 
         //Add sliders
+        JPanel sliderPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.anchor = GridBagConstraints.NORTH;
         gbc.insets = new Insets(5, 0, 5, 0);
 
         gbc.gridx = 0;
-        sliders.add(new JLabel("Red"), gbc);
+        sliderPanel.add(new JLabel("Red"), gbc);
         gbc.gridx = 1;
-        sliders.add(new JSlider(), gbc);
+        sliderPanel.add(createSlider(e -> System.out.println("Red")), gbc);
 
         gbc.gridx = 0;
-        sliders.add(new JLabel("Green"), gbc);
+        sliderPanel.add(new JLabel("Green"), gbc);
         gbc.gridx = 1;
-        sliders.add(new JSlider(), gbc);
+        sliderPanel.add(createSlider(e -> System.out.println("Green")), gbc);
 
         gbc.gridx = 0;
-        sliders.add(new JLabel("Blue"), gbc);
+        sliderPanel.add(new JLabel("Blue"), gbc);
         gbc.gridx = 1;
-        sliders.add(new JSlider(), gbc);
+        sliderPanel.add(createSlider(e -> System.out.println("Blue")), gbc);
+
+        GridBagConstraints gbcc = new GridBagConstraints();
+        gbcc.anchor = GridBagConstraints.NORTH;
+
+        JPanel sliderTempPanel = new JPanel();
+        sliderTempPanel.add(sliderPanel);
+
+        add(visual);
+        add(sliderTempPanel);
+    }
+
+    public JSlider createSlider(ChangeListener onChange) {
+        JSlider slider = new JSlider();
+        slider.setPreferredSize(new Dimension(240, 16));
+        slider.addChangeListener(onChange);
+        return slider;
     }
 
     public void addChangeListener(ChangeListener listener) {
