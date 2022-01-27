@@ -50,10 +50,6 @@ public class CCColorChooserSetterPanel extends JPanel {
         visual.add(hueBar);
         visual.add(alphaBar);
 
-        //Add sliders
-        JPanel sliderPanel = new JPanel(new GridBagLayout());
-        setupRGBSliders(sliderPanel);
-
         //Add Listeners
         picker.addChangeListener(e -> {
             setColor(CCColorUtils.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
@@ -74,22 +70,96 @@ public class CCColorChooserSetterPanel extends JPanel {
             updateSliderListeners();
         });
 
-        updateSliderListeners();
+        JPanel rgbPanel = new JPanel();
+        rgbPanel.add(setupRGBSliders(new JPanel(new GridBagLayout())));
+        JPanel hsbPanel = new JPanel();
+        hsbPanel.add(setupHSBSliders(new JPanel(new GridBagLayout()), picker, hueBar, alphaBar));
 
-        JPanel sliderOuterPanel = new JPanel();
-        sliderOuterPanel.add(sliderPanel);
 
         JTabbedPane options = new JTabbedPane();
-        options.addTab("RGB", sliderOuterPanel);
+        options.addTab("RGB", rgbPanel);
+        options.addTab("HSB", hsbPanel);
 
         add(visual);
         add(options);
+        updateSliderListeners();
     }
 
-    public void setupRGBSliders(JPanel panel) {
+    public JPanel setupHSBSliders(JPanel panel, CCHSBPicker picker, CCHSBHueBar hueBar, CCAlphaBar alphaBar) {
+        panel.removeAll();
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 0, 5, 0);
+        AtomicBoolean isSetter = new AtomicBoolean(false);
 
+        gbc.gridx = 0;
+        panel.add(new JLabel("Hue"), gbc);
+        gbc.gridx = 1;
+        JSlider hueSlider = createSlider(0, 100);
+        hueSlider.addChangeListener(e -> {
+            if(!isSetter.get()) {
+                float hue = hueSlider.getValue() / 100F;
+                picker.setHue(hue);
+                hueBar.setHue(hue);
+
+                setColor(CCColorUtils.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
+            }
+        });
+        panel.add(hueSlider, gbc);
+
+        gbc.gridx = 0;
+        panel.add(new JLabel("Saturation"), gbc);
+        gbc.gridx = 1;
+        JSlider saturationSlider = createSlider(0, 100);
+        saturationSlider.addChangeListener(e -> {
+            if(!isSetter.get()) {
+                picker.setSaturation(saturationSlider.getValue() / 100F);
+
+                setColor(CCColorUtils.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
+            }
+        });
+        panel.add(saturationSlider, gbc);
+
+        gbc.gridx = 0;
+        panel.add(new JLabel("Brightness"), gbc);
+        gbc.gridx = 1;
+        JSlider brightnessSlider = createSlider(0, 100);
+        brightnessSlider.addChangeListener(e -> {
+            if (!isSetter.get()) {
+                picker.setBrightness(brightnessSlider.getValue() / 100F);
+
+                setColor(CCColorUtils.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
+            }
+        });
+        panel.add(brightnessSlider, gbc);
+
+        gbc.gridx = 0;
+        panel.add(new JLabel("Alpha"), gbc);
+        gbc.gridx = 1;
+        JSlider alphaSlider = createSlider(0, 255);
+        alphaSlider.addChangeListener(e -> {
+            if(!isSetter.get()) {
+                setColor(CCColorUtils.setColorAlpha(color, alphaSlider.getValue()), true, false);
+                updateVisualListeners();
+            }
+        });
+        panel.add(alphaSlider, gbc);
+
+        sliderUpdateListeners.add(e -> {
+            isSetter.set(true);
+            hueSlider.setValue((int)(picker.getHue() * 100F));
+            saturationSlider.setValue((int)(picker.getSaturation() * 100F));
+            brightnessSlider.setValue((int)(picker.getBrightness() * 100F));
+            alphaSlider.setValue(color.getAlpha());
+            isSetter.set(false);
+        });
+
+        return panel;
+    }
+
+    public JPanel setupRGBSliders(JPanel panel) {
+        panel.removeAll();
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 0, 5, 0);
         AtomicBoolean isSetter = new AtomicBoolean(false);
 
         gbc.gridx = 0;
@@ -148,6 +218,7 @@ public class CCColorChooserSetterPanel extends JPanel {
             alphaSlider.setValue(color.getAlpha());
             isSetter.set(false);
         });
+        return panel;
     }
 
     public void updateSliderListeners() {
