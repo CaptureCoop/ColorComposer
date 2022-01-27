@@ -54,6 +54,7 @@ public class CCColorChooserGradientPreview extends JPanel {
                     lastPointControlled = 1;
                     colorChooser.getSetterPanel().setColor(color.getSecondaryColor(), false, true);
                 }
+                repaint();
             }
 
             @Override
