@@ -127,15 +127,19 @@ public class CCColorChooserSetterPanel extends JPanel {
     }
 
     public JSlider createSlider(JPanel panel, String title, int min, int max, AtomicBoolean isSetter, GridBagConstraints gbc, ISliderUpdate onChange) {
-        gbc.gridx = 0;
-        panel.add(new JLabel(title), gbc);
-        gbc.gridx = 1;
-        JSlider slider = createSlider(min, max);
+        JSlider slider = new JSlider(min, max);
+        slider.setMinimum(min);
+        slider.setMaximum(max);
+        slider.setPreferredSize(new Dimension(240, 16));
         slider.addChangeListener(e -> {
             if(!isSetter.get()) {
                 onChange.update(slider);
             }
         });
+        
+        gbc.gridx = 0;
+        panel.add(new JLabel(title), gbc);
+        gbc.gridx = 1;
         panel.add(slider, gbc);
         return slider;
     }
@@ -146,53 +150,25 @@ public class CCColorChooserSetterPanel extends JPanel {
         gbc.insets = new Insets(5, 0, 5, 0);
         AtomicBoolean isSetter = new AtomicBoolean(false);
 
-        gbc.gridx = 0;
-        panel.add(new JLabel("Red"), gbc);
-        gbc.gridx = 1;
-        JSlider redSlider = createSlider(0, 255);
-        redSlider.addChangeListener(e -> {
-            if(!isSetter.get()) {
-                setColor(CCColorUtils.setColorRed(color, redSlider.getValue()), true, false);
-                updateVisualListeners();
-            }
+        JSlider redSlider = createSlider(panel, "Red", 0, 255, isSetter, gbc, slider -> {
+            setColor(CCColorUtils.setColorRed(color, slider.getValue()), true, false);
+            updateVisualListeners();
         });
-        panel.add(redSlider, gbc);
 
-        gbc.gridx = 0;
-        panel.add(new JLabel("Green"), gbc);
-        gbc.gridx = 1;
-        JSlider greenSlider = createSlider(0, 255);
-        greenSlider.addChangeListener(e -> {
-            if(!isSetter.get()) {
-                setColor(CCColorUtils.setColorGreen(color, greenSlider.getValue()), true, false);
-                updateVisualListeners();
-            }
+        JSlider greenSlider = createSlider(panel, "Green", 0, 255, isSetter, gbc, slider -> {
+            setColor(CCColorUtils.setColorGreen(color, slider.getValue()), true, false);
+            updateVisualListeners();
         });
-        panel.add(greenSlider, gbc);
 
-        gbc.gridx = 0;
-        panel.add(new JLabel("Blue"), gbc);
-        gbc.gridx = 1;
-        JSlider blueSlider = createSlider(0, 255);
-        blueSlider.addChangeListener(e -> {
-            if(!isSetter.get()) {
-                setColor(CCColorUtils.setColorBlue(color, blueSlider.getValue()), true, false);
-                updateVisualListeners();
-            }
+        JSlider blueSlider = createSlider(panel, "Blue", 0, 255, isSetter, gbc, slider -> {
+            setColor(CCColorUtils.setColorBlue(color, slider.getValue()), true, false);
+            updateVisualListeners();
         });
-        panel.add(blueSlider, gbc);
 
-        gbc.gridx = 0;
-        panel.add(new JLabel("Alpha"), gbc);
-        gbc.gridx = 1;
-        JSlider alphaSlider = createSlider(0, 255);
-        alphaSlider.addChangeListener(e -> {
-            if(!isSetter.get()) {
-                setColor(CCColorUtils.setColorAlpha(color, alphaSlider.getValue()), true, false);
-                updateVisualListeners();
-            }
+        JSlider alphaSlider = createSlider(panel, "Alpha", 0, 255, isSetter, gbc, slider -> {
+            setColor(CCColorUtils.setColorAlpha(color, slider.getValue()), true, false);
+            updateVisualListeners();
         });
-        panel.add(alphaSlider, gbc);
 
         sliderUpdateListeners.add(e -> {
             isSetter.set(true);
@@ -213,14 +189,6 @@ public class CCColorChooserSetterPanel extends JPanel {
     public void updateVisualListeners() {
         for(ChangeListener listener : visualUpdateListeners)
             listener.stateChanged(new ChangeEvent(this));
-    }
-
-    public JSlider createSlider(int min, int max) {
-        JSlider slider = new JSlider(min, max);
-        slider.setMinimum(min);
-        slider.setMaximum(max);
-        slider.setPreferredSize(new Dimension(240, 16));
-        return slider;
     }
 
     public void addChangeListener(ChangeListener listener) {
