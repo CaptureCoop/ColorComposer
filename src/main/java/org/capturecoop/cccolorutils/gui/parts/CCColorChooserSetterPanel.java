@@ -110,8 +110,8 @@ public class CCColorChooserSetterPanel extends JPanel {
         });
 
         JSlider alphaSlider = createSlider(panel, "Alpha", 0, 255, isSetter, gbc, slider -> {
+            alphaBar.setAlpha(slider.getValue());
             setColor(CCColorUtils.setColorAlpha(color, slider.getValue()), true, false);
-            updateVisualListeners();
         });
 
         sliderUpdateListeners.add(e -> {
@@ -136,7 +136,7 @@ public class CCColorChooserSetterPanel extends JPanel {
                 onChange.update(slider);
             }
         });
-        
+
         gbc.gridx = 0;
         panel.add(new JLabel(title), gbc);
         gbc.gridx = 1;
