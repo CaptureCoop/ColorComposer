@@ -2,6 +2,7 @@ package org.capturecoop.cccolorutils.gui.parts;
 
 import org.capturecoop.cccolorutils.CCColorUtils;
 import org.capturecoop.cccolorutils.CCHSB;
+import org.capturecoop.cccolorutils.gui.ISliderUpdate;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -91,58 +92,27 @@ public class CCColorChooserSetterPanel extends JPanel {
         gbc.insets = new Insets(5, 0, 5, 0);
         AtomicBoolean isSetter = new AtomicBoolean(false);
 
-        gbc.gridx = 0;
-        panel.add(new JLabel("Hue"), gbc);
-        gbc.gridx = 1;
-        JSlider hueSlider = createSlider(0, 100);
-        hueSlider.addChangeListener(e -> {
-            if(!isSetter.get()) {
-                float hue = hueSlider.getValue() / 100F;
-                picker.setHue(hue);
-                hueBar.setHue(hue);
-
-                setColor(CCColorUtils.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
-            }
+        JSlider hueSlider = createSlider(panel, "Hue", 0, 100, isSetter, gbc, slider -> {
+            float hue = slider.getValue() / 100F;
+            picker.setHue(hue);
+            hueBar.setHue(hue);
+            setColor(CCColorUtils.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
         });
-        panel.add(hueSlider, gbc);
 
-        gbc.gridx = 0;
-        panel.add(new JLabel("Saturation"), gbc);
-        gbc.gridx = 1;
-        JSlider saturationSlider = createSlider(0, 100);
-        saturationSlider.addChangeListener(e -> {
-            if(!isSetter.get()) {
-                picker.setSaturation(saturationSlider.getValue() / 100F);
-
-                setColor(CCColorUtils.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
-            }
+        JSlider saturationSlider = createSlider(panel, "Saturation", 0, 100, isSetter, gbc, slider -> {
+            picker.setSaturation(slider.getValue() / 100F);
+            setColor(CCColorUtils.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
         });
-        panel.add(saturationSlider, gbc);
 
-        gbc.gridx = 0;
-        panel.add(new JLabel("Brightness"), gbc);
-        gbc.gridx = 1;
-        JSlider brightnessSlider = createSlider(0, 100);
-        brightnessSlider.addChangeListener(e -> {
-            if (!isSetter.get()) {
-                picker.setBrightness(brightnessSlider.getValue() / 100F);
-
-                setColor(CCColorUtils.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
-            }
+        JSlider brightnessSlider = createSlider(panel, "Brightness", 0, 100, isSetter, gbc, slider -> {
+            picker.setBrightness(slider.getValue() / 100F);
+            setColor(CCColorUtils.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
         });
-        panel.add(brightnessSlider, gbc);
 
-        gbc.gridx = 0;
-        panel.add(new JLabel("Alpha"), gbc);
-        gbc.gridx = 1;
-        JSlider alphaSlider = createSlider(0, 255);
-        alphaSlider.addChangeListener(e -> {
-            if(!isSetter.get()) {
-                setColor(CCColorUtils.setColorAlpha(color, alphaSlider.getValue()), true, false);
-                updateVisualListeners();
-            }
+        JSlider alphaSlider = createSlider(panel, "Alpha", 0, 255, isSetter, gbc, slider -> {
+            setColor(CCColorUtils.setColorAlpha(color, slider.getValue()), true, false);
+            updateVisualListeners();
         });
-        panel.add(alphaSlider, gbc);
 
         sliderUpdateListeners.add(e -> {
             isSetter.set(true);
@@ -154,6 +124,20 @@ public class CCColorChooserSetterPanel extends JPanel {
         });
 
         return panel;
+    }
+
+    public JSlider createSlider(JPanel panel, String title, int min, int max, AtomicBoolean isSetter, GridBagConstraints gbc, ISliderUpdate onChange) {
+        gbc.gridx = 0;
+        panel.add(new JLabel(title), gbc);
+        gbc.gridx = 1;
+        JSlider slider = createSlider(min, max);
+        slider.addChangeListener(e -> {
+            if(!isSetter.get()) {
+                onChange.update(slider);
+            }
+        });
+        panel.add(slider, gbc);
+        return slider;
     }
 
     public JPanel setupRGBSliders(JPanel panel) {
