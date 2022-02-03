@@ -3,29 +3,19 @@ plugins {
 }
 
 group 'org.capturecoop'
-version '1.0.0'
+version '1.0.1'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 
     implementation 'org.capturecoop:CCUtils:1.9.3'
 }
 
 test {
     useJUnitPlatform()
-}
-
-jar {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    from {
-        configurations
-                .runtimeClasspath
-                .findAll { !it.name.endsWith('pom') }
-                .collect { it.isDirectory() ? it : zipTree(it) }
-    }
 }

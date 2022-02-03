@@ -18,6 +18,10 @@ sourceControl {
 }
 ```
 
+## Dependencies
+
+* [CCUtils](https://github.com/capturecoop/ccutils)
+
 
 ## License
 
