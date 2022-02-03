@@ -1,6 +1,6 @@
-package org.capturecoop.cccolorutils.gui.parts;
+package org.capturecoop.cccolorutils.chooser.gui;
 
-import org.capturecoop.cccolorutils.gui.CCColorChooser;
+import org.capturecoop.cccolorutils.chooser.CCColorChooser;
 
 import javax.swing.*;
 import java.awt.*;

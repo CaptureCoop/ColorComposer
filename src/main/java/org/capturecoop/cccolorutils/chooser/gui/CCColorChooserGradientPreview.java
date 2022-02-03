@@ -1,8 +1,8 @@
-package org.capturecoop.cccolorutils.gui.parts;
+package org.capturecoop.cccolorutils.chooser.gui;
 
 import org.capturecoop.cccolorutils.CCColor;
 import org.capturecoop.cccolorutils.CCColorUtils;
-import org.capturecoop.cccolorutils.gui.CCColorChooser;
+import org.capturecoop.cccolorutils.chooser.CCColorChooser;
 import org.capturecoop.ccutils.math.CCVector2Float;
 
 import javax.swing.*;

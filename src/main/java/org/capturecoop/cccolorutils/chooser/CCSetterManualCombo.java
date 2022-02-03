@@ -1,4 +1,4 @@
-package org.capturecoop.cccolorutils.gui;
+package org.capturecoop.cccolorutils.chooser;
 
 import javax.swing.*;
 

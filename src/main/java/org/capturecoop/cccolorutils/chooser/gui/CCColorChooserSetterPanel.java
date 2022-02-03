@@ -1,9 +1,9 @@
-package org.capturecoop.cccolorutils.gui.parts;
+package org.capturecoop.cccolorutils.chooser.gui;
 
 import org.capturecoop.cccolorutils.CCColorUtils;
 import org.capturecoop.cccolorutils.CCHSB;
-import org.capturecoop.cccolorutils.gui.CCSetterManualCombo;
-import org.capturecoop.cccolorutils.gui.CCISetterManualUpdate;
+import org.capturecoop.cccolorutils.chooser.CCSetterManualCombo;
+import org.capturecoop.cccolorutils.chooser.CCISetterManualUpdate;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;

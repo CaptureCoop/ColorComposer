@@ -1,4 +1,4 @@
-package org.capturecoop.cccolorutils.gui.parts;
+package org.capturecoop.cccolorutils.chooser.gui;
 
 import org.capturecoop.cccolorutils.CCColorUtils;
 import org.capturecoop.ccutils.math.CCVector2Float;
