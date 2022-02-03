@@ -2,7 +2,9 @@ package org.capturecoop.cccolorutils.gui.parts;
 
 import org.capturecoop.cccolorutils.CCColorUtils;
 import org.capturecoop.cccolorutils.CCHSB;
-import org.capturecoop.cccolorutils.gui.ISliderUpdate;
+import org.capturecoop.cccolorutils.gui.CCSliderOrSpinner;
+import org.capturecoop.cccolorutils.gui.CCSliderSpinnerCombo;
+import org.capturecoop.cccolorutils.gui.CCISliderOrSpinnerUpdate;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -92,31 +94,31 @@ public class CCColorChooserSetterPanel extends JPanel {
         gbc.insets = new Insets(5, 0, 5, 0);
         AtomicBoolean isSetter = new AtomicBoolean(false);
 
-        JSlider hueSlider = createSlider(panel, "Hue", 0, 100, isSetter, gbc, slider -> {
-            float hue = slider.getValue() / 100F;
-            picker.setHue(hue);
-            hueBar.setHue(hue);
+        CCSliderSpinnerCombo hue = createSettings(panel, "Hue", 0, 100, isSetter, gbc, component -> {
+            float hueValue = component.getValue() / 100F;
+            picker.setHue(hueValue);
+            hueBar.setHue(hueValue);
             setColor(CCColorUtils.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
         });
 
-        JSlider saturationSlider = createSlider(panel, "Saturation", 0, 100, isSetter, gbc, slider -> {
-            picker.setSaturation(slider.getValue() / 100F);
+        CCSliderSpinnerCombo saturationSlider = createSettings(panel, "Saturation", 0, 100, isSetter, gbc, component -> {
+            picker.setSaturation(component.getValue() / 100F);
             setColor(CCColorUtils.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
         });
 
-        JSlider brightnessSlider = createSlider(panel, "Brightness", 0, 100, isSetter, gbc, slider -> {
-            picker.setBrightness(slider.getValue() / 100F);
+        CCSliderSpinnerCombo brightnessSlider = createSettings(panel, "Brightness", 0, 100, isSetter, gbc, component -> {
+            picker.setBrightness(component.getValue() / 100F);
             setColor(CCColorUtils.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
         });
 
-        JSlider alphaSlider = createSlider(panel, "Alpha", 0, 255, isSetter, gbc, slider -> {
-            alphaBar.setAlpha(slider.getValue());
-            setColor(CCColorUtils.setColorAlpha(color, slider.getValue()), true, false);
+        CCSliderSpinnerCombo alphaSlider = createSettings(panel, "Alpha", 0, 255, isSetter, gbc, component -> {
+            alphaBar.setAlpha(component.getValue());
+            setColor(CCColorUtils.setColorAlpha(color, component.getValue()), true, false);
         });
 
         sliderUpdateListeners.add(e -> {
             isSetter.set(true);
-            hueSlider.setValue((int)(picker.getHue() * 100F));
+            hue.setValue((int)(picker.getHue() * 100F));
             saturationSlider.setValue((int)(picker.getSaturation() * 100F));
             brightnessSlider.setValue((int)(picker.getBrightness() * 100F));
             alphaSlider.setValue(color.getAlpha());
@@ -126,56 +128,70 @@ public class CCColorChooserSetterPanel extends JPanel {
         return panel;
     }
 
-    public JSlider createSlider(JPanel panel, String title, int min, int max, AtomicBoolean isSetter, GridBagConstraints gbc, ISliderUpdate onChange) {
+    public CCSliderSpinnerCombo createSettings(JPanel panel, String title, int min, int max, AtomicBoolean isSetter, GridBagConstraints gbc, CCISliderOrSpinnerUpdate onUpdate) {
         JSlider slider = new JSlider(min, max);
+        JSpinner spinner = new JSpinner();
+
         slider.setMinimum(min);
         slider.setMaximum(max);
         slider.setPreferredSize(new Dimension(240, 16));
         slider.addChangeListener(e -> {
             if(!isSetter.get()) {
-                onChange.update(slider);
+                onUpdate.update(new CCSliderOrSpinner(slider));
             }
+            spinner.setValue(slider.getValue());
         });
 
         gbc.gridx = 0;
         panel.add(new JLabel(title), gbc);
         gbc.gridx = 1;
         panel.add(slider, gbc);
-        return slider;
+
+        spinner.addChangeListener(e -> {
+            if(!isSetter.get()) {
+                onUpdate.update(new CCSliderOrSpinner(spinner));
+            }
+            slider.setValue((int)spinner.getValue());
+        });
+        spinner.setModel(new SpinnerNumberModel(0, min, max, 1));
+        gbc.gridx = 2;
+        panel.add(spinner, gbc);
+
+        return new CCSliderSpinnerCombo(slider, spinner);
     }
 
     public JPanel setupRGBSliders(JPanel panel) {
         panel.removeAll();
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 0, 5, 0);
+        gbc.insets = new Insets(5, 5, 5, 5);
         AtomicBoolean isSetter = new AtomicBoolean(false);
 
-        JSlider redSlider = createSlider(panel, "Red", 0, 255, isSetter, gbc, slider -> {
-            setColor(CCColorUtils.setColorRed(color, slider.getValue()), true, false);
+        CCSliderSpinnerCombo red = createSettings(panel, "Red", 0, 255, isSetter, gbc, component -> {
+            setColor(CCColorUtils.setColorRed(color, component.getValue()), true, false);
             updateVisualListeners();
         });
 
-        JSlider greenSlider = createSlider(panel, "Green", 0, 255, isSetter, gbc, slider -> {
-            setColor(CCColorUtils.setColorGreen(color, slider.getValue()), true, false);
+        CCSliderSpinnerCombo green = createSettings(panel, "Green", 0, 255, isSetter, gbc, component -> {
+            setColor(CCColorUtils.setColorGreen(color, component.getValue()), true, false);
             updateVisualListeners();
         });
 
-        JSlider blueSlider = createSlider(panel, "Blue", 0, 255, isSetter, gbc, slider -> {
-            setColor(CCColorUtils.setColorBlue(color, slider.getValue()), true, false);
+        CCSliderSpinnerCombo blue = createSettings(panel, "Blue", 0, 255, isSetter, gbc, component -> {
+            setColor(CCColorUtils.setColorBlue(color, component.getValue()), true, false);
             updateVisualListeners();
         });
 
-        JSlider alphaSlider = createSlider(panel, "Alpha", 0, 255, isSetter, gbc, slider -> {
-            setColor(CCColorUtils.setColorAlpha(color, slider.getValue()), true, false);
+        CCSliderSpinnerCombo alpha = createSettings(panel, "Alpha", 0, 255, isSetter, gbc, component -> {
+            setColor(CCColorUtils.setColorAlpha(color, component.getValue()), true, false);
             updateVisualListeners();
         });
 
         sliderUpdateListeners.add(e -> {
             isSetter.set(true);
-            redSlider.setValue(color.getRed());
-            greenSlider.setValue(color.getGreen());
-            blueSlider.setValue(color.getBlue());
-            alphaSlider.setValue(color.getAlpha());
+            red.setValue(color.getRed());
+            green.setValue(color.getGreen());
+            blue.setValue(color.getBlue());
+            alpha.setValue(color.getAlpha());
             isSetter.set(false);
         });
         return panel;

@@ -3,8 +3,6 @@ package org.capturecoop.cccolorutils.gui.parts;
 import org.capturecoop.cccolorutils.gui.CCColorChooser;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
