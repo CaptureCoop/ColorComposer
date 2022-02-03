@@ -2,9 +2,8 @@ package org.capturecoop.cccolorutils.gui.parts;
 
 import org.capturecoop.cccolorutils.CCColorUtils;
 import org.capturecoop.cccolorutils.CCHSB;
-import org.capturecoop.cccolorutils.gui.CCSliderOrSpinner;
-import org.capturecoop.cccolorutils.gui.CCSliderSpinnerCombo;
-import org.capturecoop.cccolorutils.gui.CCISliderOrSpinnerUpdate;
+import org.capturecoop.cccolorutils.gui.CCSetterManualCombo;
+import org.capturecoop.cccolorutils.gui.CCISetterManualUpdate;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -18,7 +17,6 @@ public class CCColorChooserSetterPanel extends JPanel {
     private final ArrayList<ChangeListener> changeListeners = new ArrayList<>();
     private final ArrayList<ChangeListener> sliderUpdateListeners = new ArrayList<>();
     private final ArrayList<ChangeListener> visualUpdateListeners = new ArrayList<>();
-    private enum SLIDER_OPTION {RGB, HSB}
 
     public CCColorChooserSetterPanel(Color startColor) {
         this.color = startColor;
@@ -94,24 +92,24 @@ public class CCColorChooserSetterPanel extends JPanel {
         gbc.insets = new Insets(5, 0, 5, 0);
         AtomicBoolean isSetter = new AtomicBoolean(false);
 
-        CCSliderSpinnerCombo hue = createSettings(panel, "Hue", 0, 100, isSetter, gbc, component -> {
+        CCSetterManualCombo hue = createSettings(panel, "Hue", 0, 100, isSetter, gbc, component -> {
             float hueValue = component.getValue() / 100F;
             picker.setHue(hueValue);
             hueBar.setHue(hueValue);
             setColor(CCColorUtils.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
         });
 
-        CCSliderSpinnerCombo saturationSlider = createSettings(panel, "Saturation", 0, 100, isSetter, gbc, component -> {
+        CCSetterManualCombo saturationSlider = createSettings(panel, "Saturation", 0, 100, isSetter, gbc, component -> {
             picker.setSaturation(component.getValue() / 100F);
             setColor(CCColorUtils.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
         });
 
-        CCSliderSpinnerCombo brightnessSlider = createSettings(panel, "Brightness", 0, 100, isSetter, gbc, component -> {
+        CCSetterManualCombo brightnessSlider = createSettings(panel, "Brightness", 0, 100, isSetter, gbc, component -> {
             picker.setBrightness(component.getValue() / 100F);
             setColor(CCColorUtils.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
         });
 
-        CCSliderSpinnerCombo alphaSlider = createSettings(panel, "Alpha", 0, 255, isSetter, gbc, component -> {
+        CCSetterManualCombo alphaSlider = createSettings(panel, "Alpha", 0, 255, isSetter, gbc, component -> {
             alphaBar.setAlpha(component.getValue());
             setColor(CCColorUtils.setColorAlpha(color, component.getValue()), true, false);
         });
@@ -128,7 +126,7 @@ public class CCColorChooserSetterPanel extends JPanel {
         return panel;
     }
 
-    public CCSliderSpinnerCombo createSettings(JPanel panel, String title, int min, int max, AtomicBoolean isSetter, GridBagConstraints gbc, CCISliderOrSpinnerUpdate onUpdate) {
+    public CCSetterManualCombo createSettings(JPanel panel, String title, int min, int max, AtomicBoolean isSetter, GridBagConstraints gbc, CCISetterManualUpdate onUpdate) {
         JSlider slider = new JSlider(min, max);
         JSpinner spinner = new JSpinner();
 
@@ -137,7 +135,7 @@ public class CCColorChooserSetterPanel extends JPanel {
         slider.setPreferredSize(new Dimension(240, 16));
         slider.addChangeListener(e -> {
             if(!isSetter.get()) {
-                onUpdate.update(new CCSliderOrSpinner(slider));
+                onUpdate.update(new CCSetterManualCombo(slider));
             }
             spinner.setValue(slider.getValue());
         });
@@ -149,7 +147,7 @@ public class CCColorChooserSetterPanel extends JPanel {
 
         spinner.addChangeListener(e -> {
             if(!isSetter.get()) {
-                onUpdate.update(new CCSliderOrSpinner(spinner));
+                onUpdate.update(new CCSetterManualCombo(spinner));
             }
             slider.setValue((int)spinner.getValue());
         });
@@ -157,7 +155,7 @@ public class CCColorChooserSetterPanel extends JPanel {
         gbc.gridx = 2;
         panel.add(spinner, gbc);
 
-        return new CCSliderSpinnerCombo(slider, spinner);
+        return new CCSetterManualCombo(slider, spinner);
     }
 
     public JPanel setupRGBSliders(JPanel panel) {
@@ -166,22 +164,22 @@ public class CCColorChooserSetterPanel extends JPanel {
         gbc.insets = new Insets(5, 5, 5, 5);
         AtomicBoolean isSetter = new AtomicBoolean(false);
 
-        CCSliderSpinnerCombo red = createSettings(panel, "Red", 0, 255, isSetter, gbc, component -> {
+        CCSetterManualCombo red = createSettings(panel, "Red", 0, 255, isSetter, gbc, component -> {
             setColor(CCColorUtils.setColorRed(color, component.getValue()), true, false);
             updateVisualListeners();
         });
 
-        CCSliderSpinnerCombo green = createSettings(panel, "Green", 0, 255, isSetter, gbc, component -> {
+        CCSetterManualCombo green = createSettings(panel, "Green", 0, 255, isSetter, gbc, component -> {
             setColor(CCColorUtils.setColorGreen(color, component.getValue()), true, false);
             updateVisualListeners();
         });
 
-        CCSliderSpinnerCombo blue = createSettings(panel, "Blue", 0, 255, isSetter, gbc, component -> {
+        CCSetterManualCombo blue = createSettings(panel, "Blue", 0, 255, isSetter, gbc, component -> {
             setColor(CCColorUtils.setColorBlue(color, component.getValue()), true, false);
             updateVisualListeners();
         });
 
-        CCSliderSpinnerCombo alpha = createSettings(panel, "Alpha", 0, 255, isSetter, gbc, component -> {
+        CCSetterManualCombo alpha = createSettings(panel, "Alpha", 0, 255, isSetter, gbc, component -> {
             setColor(CCColorUtils.setColorAlpha(color, component.getValue()), true, false);
             updateVisualListeners();
         });
