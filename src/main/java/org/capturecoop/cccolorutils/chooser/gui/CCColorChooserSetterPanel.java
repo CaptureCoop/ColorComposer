@@ -89,7 +89,7 @@ public class CCColorChooserSetterPanel extends JPanel {
     public JPanel setupHSBSliders(JPanel panel, CCHSBPicker picker, CCHSBHueBar hueBar, CCAlphaBar alphaBar) {
         panel.removeAll();
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 0, 5, 0);
+        gbc.insets = new Insets(5, 5, 5, 5);
         AtomicBoolean isSetter = new AtomicBoolean(false);
 
         CCSetterManualCombo hue = createSettings(panel, "Hue", 0, 100, isSetter, gbc, component -> {
