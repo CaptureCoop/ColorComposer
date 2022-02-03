@@ -27,10 +27,10 @@ public class CCColorChooser extends JFrame implements ICCClosable {
 
         setTitle(title);
         if(icon != null) setIconImage(icon);
-        init(x, y, useGradient, backgroundImage);
+        init(x, y);
     }
 
-    public void init(int x, int y, boolean useGradient, BufferedImage previewBackground) {
+    public void init(int x, int y) {
         JPanel mainPanel = new JPanel();
         JPanel submitButtonPanel = new JPanel();
         JButton submit = new JButton("Okay");
