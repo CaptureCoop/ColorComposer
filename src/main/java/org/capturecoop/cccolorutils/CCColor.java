@@ -162,6 +162,10 @@ public class CCColor {
         listeners.add(listener);
     }
 
+    public void removeChangeListener(ChangeListener listener) {
+        listeners.remove(listener);
+    }
+
     public String toSaveString() {
         String string = CCColorUtils.rgb2hex(primaryColor);
         if(primaryColor.getAlpha() != 255)
@@ -247,8 +251,6 @@ public class CCColor {
     public boolean isValidGradient() {
         return secondaryColor != null;
     }
-
-
 
     @Override
     public String toString() {

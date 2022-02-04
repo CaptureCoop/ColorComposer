@@ -6,6 +6,7 @@ import org.capturecoop.cccolorutils.chooser.gui.CCColorChooserSetterPanel;
 import org.capturecoop.ccutils.utils.ICCClosable;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -18,12 +19,16 @@ public class CCColorChooser extends JFrame implements ICCClosable {
     private final CCColorChooserSetterPanel setterPanel;
 
     private final ArrayList<ChangeListener> changeListeners = new ArrayList<>();
+    private final ChangeListener colorChangeListener;
 
     public CCColorChooser(CCColor color, String title, int x, int y, boolean useGradient, BufferedImage backgroundImage, BufferedImage icon) {
         instance = this;
         this.color = color;
         setterPanel = new CCColorChooserSetterPanel(color.getPrimaryColor());
         previewPanel = new CCColorChooserPreviewPanel(this, useGradient, backgroundImage);
+
+        colorChangeListener = e -> alertChangeListeners();
+        color.addChangeListener(colorChangeListener);
 
         setTitle(title);
         if(icon != null) setIconImage(icon);
@@ -68,8 +73,19 @@ public class CCColorChooser extends JFrame implements ICCClosable {
         changeListeners.add(listener);
     }
 
+    public void removeChangeListener(ChangeListener listener) {
+        changeListeners.remove(listener);
+    }
+
+    public void alertChangeListeners() {
+        for(ChangeListener listener : changeListeners) {
+            listener.stateChanged(new ChangeEvent(this));
+        }
+    }
+
     @Override
     public void close() {
+        color.removeChangeListener(colorChangeListener);
         dispose();
     }
 }
