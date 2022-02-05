@@ -1,5 +1,6 @@
 package org.capturecoop.cccolorutils.chooser.gui;
 
+import org.capturecoop.cccolorutils.CCColor;
 import org.capturecoop.cccolorutils.CCColorUtils;
 import org.capturecoop.cccolorutils.CCHSB;
 import org.capturecoop.cccolorutils.chooser.CCColorChooser;
@@ -123,7 +124,8 @@ public class CCColorChooserSetterPanel extends JPanel {
             updateVisualListeners();
         });
 
-        addHexInput(panel, gbc);
+        createHexInput(panel, gbc);
+        createCCColorFormatField(panel, gbc);
 
         sliderUpdateListeners.add(e -> {
             isSetter.set(true);
@@ -162,7 +164,8 @@ public class CCColorChooserSetterPanel extends JPanel {
             updateVisualListeners();
         });
 
-        addHexInput(panel, gbc);
+        createHexInput(panel, gbc);
+        createCCColorFormatField(panel, gbc);
 
         sliderUpdateListeners.add(e -> {
             isSetter.set(true);
@@ -208,7 +211,35 @@ public class CCColorChooserSetterPanel extends JPanel {
         return new CCSetterManualCombo(slider, spinner);
     }
 
-    public JTextField addHexInput(JPanel panel, GridBagConstraints gbc) {
+    public JTextField createCCColorFormatField(JPanel panel, GridBagConstraints gbc) {
+        JTextField textArea = new JTextField(chooser.getColor().toSaveString());
+        Dimension size = textArea.getPreferredSize();
+        size.width = size.width * 5;
+        textArea.setPreferredSize(size);
+        textArea.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                switch(e.getKeyCode()) {
+                    case KeyEvent.VK_ENTER:
+                    case KeyEvent.VK_ESCAPE:
+                        chooser.requestFocus();
+                        chooser.setColor(CCColor.fromSaveString(textArea.getText()));
+                        break;
+                }
+            }
+        });
+
+        chooser.getColor().addChangeListener(e -> textArea.setText(chooser.getColor().toSaveString()));
+
+        gbc.gridx = 0;
+        panel.add(new JLabel("Save String"), gbc);
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(textArea, gbc);
+        return textArea;
+    }
+
+    public JTextField createHexInput(JPanel panel, GridBagConstraints gbc) {
         JTextField textArea = new JTextField(CCColorUtils.rgb2hex(color));
         Dimension size = textArea.getPreferredSize();
         size.width = size.width * 2;
