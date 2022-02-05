@@ -1,6 +1,5 @@
 package org.capturecoop.cccolorutils.chooser.gui;
 
-import org.capturecoop.cccolorutils.CCColor;
 import org.capturecoop.cccolorutils.CCColorUtils;
 import org.capturecoop.cccolorutils.CCHSB;
 import org.capturecoop.ccutils.math.CCVector2Float;

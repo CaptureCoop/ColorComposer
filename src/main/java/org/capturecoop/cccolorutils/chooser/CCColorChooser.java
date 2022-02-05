@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class CCColorChooser extends JFrame implements ICCClosable {
     private final CCColorChooser instance;
-    private CCColor color;
+    private final CCColor color;
     private final CCColorChooserPreviewPanel previewPanel;
     private final CCColorChooserSetterPanel setterPanel;
 

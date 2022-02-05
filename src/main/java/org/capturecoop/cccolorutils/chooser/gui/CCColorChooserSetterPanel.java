@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CCColorChooserSetterPanel extends JPanel {
-    private CCColorChooser chooser;
+    private final CCColorChooser chooser;
     private Color color;
     private final ArrayList<ChangeListener> changeListeners = new ArrayList<>();
     private final ArrayList<ChangeListener> sliderUpdateListeners = new ArrayList<>();
@@ -211,7 +211,7 @@ public class CCColorChooserSetterPanel extends JPanel {
         return new CCSetterManualCombo(slider, spinner);
     }
 
-    public JTextField createCCColorFormatField(JPanel panel, GridBagConstraints gbc) {
+    public void createCCColorFormatField(JPanel panel, GridBagConstraints gbc) {
         JTextField textArea = new JTextField(chooser.getColor().toSaveString());
         Dimension size = textArea.getPreferredSize();
         size.width = size.width * 5;
@@ -236,10 +236,9 @@ public class CCColorChooserSetterPanel extends JPanel {
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.WEST;
         panel.add(textArea, gbc);
-        return textArea;
     }
 
-    public JTextField createHexInput(JPanel panel, GridBagConstraints gbc) {
+    public void createHexInput(JPanel panel, GridBagConstraints gbc) {
         JTextField textArea = new JTextField(CCColorUtils.rgb2hex(color));
         Dimension size = textArea.getPreferredSize();
         size.width = size.width * 2;
@@ -269,7 +268,6 @@ public class CCColorChooserSetterPanel extends JPanel {
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.WEST;
         panel.add(textArea, gbc);
-        return textArea;
     }
 
     public void updateSliderListeners() {
