@@ -69,6 +69,12 @@ public class CCColorChooser extends JFrame implements ICCClosable {
         return color;
     }
 
+    public void setColor(CCColor color) {
+        this.color.loadFromCCColor(color);
+        //Update setter, preview panel updates automatically via a listener in cccolor
+        setterPanel.setColor(color.getPrimaryColor(), true, true);
+    }
+
     public void addChangeListener(ChangeListener listener) {
         changeListeners.add(listener);
     }
