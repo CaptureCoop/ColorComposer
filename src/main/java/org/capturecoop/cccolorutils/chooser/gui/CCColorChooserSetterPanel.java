@@ -102,22 +102,28 @@ public class CCColorChooserSetterPanel extends JPanel {
             picker.setHue(hueValue);
             hueBar.setHue(hueValue);
             setColor(CCColorUtils.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
+            updateVisualListeners();
         });
 
         CCSetterManualCombo saturationSlider = createSettings(panel, "Saturation", 0, 100, isSetter, gbc, component -> {
             picker.setSaturation(component.getValue() / 100F);
             setColor(CCColorUtils.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
+            updateVisualListeners();
         });
 
         CCSetterManualCombo brightnessSlider = createSettings(panel, "Brightness", 0, 100, isSetter, gbc, component -> {
             picker.setBrightness(component.getValue() / 100F);
             setColor(CCColorUtils.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
+            updateVisualListeners();
         });
 
         CCSetterManualCombo alphaSlider = createSettings(panel, "Alpha", 0, 255, isSetter, gbc, component -> {
             alphaBar.setAlpha(component.getValue());
             setColor(CCColorUtils.setColorAlpha(color, component.getValue()), true, false);
+            updateVisualListeners();
         });
+
+        addHexInput(panel, gbc);
 
         sliderUpdateListeners.add(e -> {
             isSetter.set(true);
@@ -125,6 +131,45 @@ public class CCColorChooserSetterPanel extends JPanel {
             saturationSlider.setValue((int)(picker.getSaturation() * 100F));
             brightnessSlider.setValue((int)(picker.getBrightness() * 100F));
             alphaSlider.setValue(color.getAlpha());
+            isSetter.set(false);
+        });
+        return panel;
+    }
+
+    public JPanel setupRGBSliders(JPanel panel) {
+        panel.removeAll();
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        AtomicBoolean isSetter = new AtomicBoolean(false);
+
+        CCSetterManualCombo red = createSettings(panel, "Red", 0, 255, isSetter, gbc, component -> {
+            setColor(CCColorUtils.setColorRed(color, component.getValue()), true, false);
+            updateVisualListeners();
+        });
+
+        CCSetterManualCombo green = createSettings(panel, "Green", 0, 255, isSetter, gbc, component -> {
+            setColor(CCColorUtils.setColorGreen(color, component.getValue()), true, false);
+            updateVisualListeners();
+        });
+
+        CCSetterManualCombo blue = createSettings(panel, "Blue", 0, 255, isSetter, gbc, component -> {
+            setColor(CCColorUtils.setColorBlue(color, component.getValue()), true, false);
+            updateVisualListeners();
+        });
+
+        CCSetterManualCombo alpha = createSettings(panel, "Alpha", 0, 255, isSetter, gbc, component -> {
+            setColor(CCColorUtils.setColorAlpha(color, component.getValue()), true, false);
+            updateVisualListeners();
+        });
+
+        addHexInput(panel, gbc);
+
+        sliderUpdateListeners.add(e -> {
+            isSetter.set(true);
+            red.setValue(color.getRed());
+            green.setValue(color.getGreen());
+            blue.setValue(color.getBlue());
+            alpha.setValue(color.getAlpha());
             isSetter.set(false);
         });
 
@@ -163,50 +208,6 @@ public class CCColorChooserSetterPanel extends JPanel {
         return new CCSetterManualCombo(slider, spinner);
     }
 
-    public JPanel setupRGBSliders(JPanel panel) {
-        panel.removeAll();
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
-        AtomicBoolean isSetter = new AtomicBoolean(false);
-
-        CCSetterManualCombo red = createSettings(panel, "Red", 0, 255, isSetter, gbc, component -> {
-            setColor(CCColorUtils.setColorRed(color, component.getValue()), true, false);
-            updateVisualListeners();
-        });
-
-        CCSetterManualCombo green = createSettings(panel, "Green", 0, 255, isSetter, gbc, component -> {
-            setColor(CCColorUtils.setColorGreen(color, component.getValue()), true, false);
-            updateVisualListeners();
-        });
-
-        CCSetterManualCombo blue = createSettings(panel, "Blue", 0, 255, isSetter, gbc, component -> {
-            setColor(CCColorUtils.setColorBlue(color, component.getValue()), true, false);
-            updateVisualListeners();
-        });
-
-        CCSetterManualCombo alpha = createSettings(panel, "Alpha", 0, 255, isSetter, gbc, component -> {
-            setColor(CCColorUtils.setColorAlpha(color, component.getValue()), true, false);
-            updateVisualListeners();
-        });
-
-        JTextField hex = addHexInput(panel, gbc);
-
-        sliderUpdateListeners.add(e -> {
-            isSetter.set(true);
-            red.setValue(color.getRed());
-            green.setValue(color.getGreen());
-            blue.setValue(color.getBlue());
-            alpha.setValue(color.getAlpha());
-            hex.setText(CCColorUtils.rgb2hex(color));
-            isSetter.set(false);
-        });
-
-        //HEX should always update
-        visualUpdateListeners.add(e -> hex.setText(CCColorUtils.rgb2hex(color)));
-
-        return panel;
-    }
-
     public JTextField addHexInput(JPanel panel, GridBagConstraints gbc) {
         JTextField textArea = new JTextField(CCColorUtils.rgb2hex(color));
         Dimension size = textArea.getPreferredSize();
@@ -228,6 +229,9 @@ public class CCColorChooserSetterPanel extends JPanel {
                 }
             }
         });
+        ChangeListener update = e -> textArea.setText(CCColorUtils.rgb2hex(color));
+        visualUpdateListeners.add(update);
+        sliderUpdateListeners.add(update);
 
         gbc.gridx = 0;
         panel.add(new JLabel("HEX"), gbc);
