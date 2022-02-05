@@ -2,6 +2,7 @@ package org.capturecoop.cccolorutils.chooser.gui;
 
 import org.capturecoop.cccolorutils.CCColorUtils;
 import org.capturecoop.cccolorutils.CCHSB;
+import org.capturecoop.cccolorutils.chooser.CCColorChooser;
 import org.capturecoop.cccolorutils.chooser.CCSetterManualCombo;
 import org.capturecoop.cccolorutils.chooser.CCISetterManualUpdate;
 
@@ -9,17 +10,21 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CCColorChooserSetterPanel extends JPanel {
+    private CCColorChooser chooser;
     private Color color;
     private final ArrayList<ChangeListener> changeListeners = new ArrayList<>();
     private final ArrayList<ChangeListener> sliderUpdateListeners = new ArrayList<>();
     private final ArrayList<ChangeListener> visualUpdateListeners = new ArrayList<>();
 
-    public CCColorChooserSetterPanel(Color startColor) {
+    public CCColorChooserSetterPanel(Color startColor, CCColorChooser chooser) {
         this.color = startColor;
+        this.chooser = chooser;
 
         setLayout(new GridLayout(0, 2));
 
@@ -184,15 +189,52 @@ public class CCColorChooserSetterPanel extends JPanel {
             updateVisualListeners();
         });
 
+        JTextField hex = addHexInput(panel, gbc);
+
         sliderUpdateListeners.add(e -> {
             isSetter.set(true);
             red.setValue(color.getRed());
             green.setValue(color.getGreen());
             blue.setValue(color.getBlue());
             alpha.setValue(color.getAlpha());
+            hex.setText(CCColorUtils.rgb2hex(color));
             isSetter.set(false);
         });
+
+        //HEX should always update
+        visualUpdateListeners.add(e -> hex.setText(CCColorUtils.rgb2hex(color)));
+
         return panel;
+    }
+
+    public JTextField addHexInput(JPanel panel, GridBagConstraints gbc) {
+        JTextField textArea = new JTextField(CCColorUtils.rgb2hex(color));
+        Dimension size = textArea.getPreferredSize();
+        size.width = size.width * 2;
+        textArea.setPreferredSize(size);
+        textArea.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                switch(e.getKeyCode()) {
+                    case KeyEvent.VK_ENTER:
+                    case KeyEvent.VK_ESCAPE:
+                        chooser.requestFocus();
+                        Color temp = CCColorUtils.hex2rgb(textArea.getText());
+                        if(temp != null)
+                            setColor(temp, true, true);
+                        else
+                            textArea.setText(CCColorUtils.rgb2hex(color));
+                        break;
+                }
+            }
+        });
+
+        gbc.gridx = 0;
+        panel.add(new JLabel("HEX"), gbc);
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(textArea, gbc);
+        return textArea;
     }
 
     public void updateSliderListeners() {

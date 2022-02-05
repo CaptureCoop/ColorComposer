@@ -13,7 +13,14 @@ public class CCColorUtils {
     }
 
     public static Color hex2rgb(String colorStr) {
-        return new Color(Integer.valueOf(colorStr.substring(1, 3), 16), Integer.valueOf( colorStr.substring(3, 5), 16), Integer.valueOf(colorStr.substring(5, 7), 16));
+        try {
+            int r = Integer.valueOf(colorStr.substring(1, 3), 16);
+            int g = Integer.valueOf(colorStr.substring(3, 5), 16);
+            int b = Integer.valueOf(colorStr.substring(5, 7), 16);
+            return new Color(r, g, b);
+        } catch (Exception exception) {
+            return null;
+        }
     }
 
     public static BufferedImage createAlphaBar(Color color, int width, int height, DIRECTION direction) {

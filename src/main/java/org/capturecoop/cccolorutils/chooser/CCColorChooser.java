@@ -24,7 +24,7 @@ public class CCColorChooser extends JFrame implements ICCClosable {
     public CCColorChooser(CCColor color, String title, int x, int y, boolean useGradient, BufferedImage backgroundImage, BufferedImage icon) {
         instance = this;
         this.color = color;
-        setterPanel = new CCColorChooserSetterPanel(color.getPrimaryColor());
+        setterPanel = new CCColorChooserSetterPanel(color.getPrimaryColor(), this);
         previewPanel = new CCColorChooserPreviewPanel(this, useGradient, backgroundImage);
 
         colorChangeListener = e -> alertChangeListeners();
