@@ -214,7 +214,7 @@ public class CCColorChooserSetterPanel extends JPanel {
     public void createCCColorFormatField(JPanel panel, GridBagConstraints gbc) {
         JTextField textArea = new JTextField(chooser.getColor().toSaveString());
         Dimension size = textArea.getPreferredSize();
-        size.width = size.width * 5;
+        size.width = size.width * 3;
         textArea.setPreferredSize(size);
         textArea.addKeyListener(new KeyAdapter() {
             @Override
