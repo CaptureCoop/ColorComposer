@@ -215,6 +215,9 @@ public class CCColorChooserSetterPanel extends JPanel {
         JTextField textArea = new JTextField(chooser.getColor().toSaveString());
         Dimension size = textArea.getPreferredSize();
         size.width = size.width * 3;
+        //Avoid getting larger than 300...
+        if(size.width > 300)
+            size.width = 300;
         textArea.setPreferredSize(size);
         textArea.addKeyListener(new KeyAdapter() {
             @Override
