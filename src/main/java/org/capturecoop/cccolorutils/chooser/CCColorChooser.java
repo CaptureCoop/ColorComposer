@@ -3,7 +3,7 @@ package org.capturecoop.cccolorutils.chooser;
 import org.capturecoop.cccolorutils.CCColor;
 import org.capturecoop.cccolorutils.chooser.gui.CCColorChooserPreviewPanel;
 import org.capturecoop.cccolorutils.chooser.gui.CCColorChooserSetterPanel;
-import org.capturecoop.ccutils.utils.ICCClosable;
+import org.capturecoop.ccutils.utils.CCIClosable;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -12,7 +12,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-public class CCColorChooser extends JFrame implements ICCClosable {
+public class CCColorChooser extends JFrame implements CCIClosable {
     private final CCColorChooser instance;
     private final CCColor color;
     private final CCColorChooserPreviewPanel previewPanel;
