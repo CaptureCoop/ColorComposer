@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    implementation("org.capturecoop:CCUtils:1.9.4") //CaptureCoop Common Utils
+    implementation("org.capturecoop:CCUtils:1.9.5") //CaptureCoop Common Utils
 }
 
 tasks.withType<KotlinCompile> {
