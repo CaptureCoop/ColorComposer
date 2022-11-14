@@ -62,8 +62,8 @@ class CCColor {
     }
 
     constructor(color: CCColor, alpha: Int) {
-        color.primaryColor.let { primaryColor = CCColorUtils.setColorAlpha(it, alpha) }
-        color.secondaryColor?.let { secondaryColor = CCColorUtils.setColorAlpha(it, alpha) }
+        color.primaryColor.let { primaryColor = it.setAlpha(alpha) }
+        color.secondaryColor?.let { secondaryColor = it.setAlpha(alpha) }
         isGradient = color.isGradient
         color.point1?.let { point1 = it }
         color.point2?.let { point2 = it }
@@ -76,7 +76,7 @@ class CCColor {
     }
 
     constructor(color: Color, alpha: Int) {
-        primaryColor = CCColorUtils.setColorAlpha(color, alpha)
+        primaryColor = color.setAlpha(alpha)
     }
 
     constructor(r: Int, g: Int, b: Int, a: Int) {
@@ -179,8 +179,8 @@ class CCColor {
 
                     if(color != null) {
                         when(i) {
-                            0 -> newColor.primaryColor = CCColorUtils.setColorAlpha(color!!, alpha)
-                            1 -> newColor.secondaryColor = CCColorUtils.setColorAlpha(color!!, alpha)
+                            0 -> newColor.primaryColor = color!!.setAlpha(alpha)
+                            1 -> newColor.secondaryColor = color!!.setAlpha(alpha)
                         }
                     }
 
