@@ -9,8 +9,16 @@ import javax.swing.event.ChangeEvent
 import javax.swing.event.ChangeListener
 
 class CCColor {
-    private lateinit var primaryColor: Color
-    private var secondaryColor: Color? = null
+    var primaryColor: Color
+        set(value) {
+            field = value
+            alertChangeListeners()
+        }
+    var secondaryColor: Color? = null
+        set(value) {
+            field = value
+            alertChangeListeners()
+        }
     var point1: CCVector2Float? = null
         set(value) {
             if(value != null) {
@@ -78,28 +86,6 @@ class CCColor {
     fun getColor(type: ColorType) = when(type) {
         ColorType.PRIMARY -> primaryColor
         ColorType.SECONDARY -> secondaryColor
-    }
-
-    fun setPrimaryColor(color: Color, alpha: Int) {
-        setPrimaryColor(CCColorUtils.setColorAlpha(color, alpha))
-    }
-
-    fun setPrimaryColor(color: Color) {
-        primaryColor = color
-        alertChangeListeners()
-    }
-
-    fun setSecondaryColor(color: Color?, alpha: Int) {
-        if(color == null) {
-            setSecondaryColor(null)
-            return
-        }
-        setSecondaryColor(CCColorUtils.setColorAlpha(color, alpha))
-    }
-
-    fun setSecondaryColor(color: Color?) {
-        secondaryColor = color
-        alertChangeListeners()
     }
 
     fun loadFromCCColor(otherColor: CCColor) {
