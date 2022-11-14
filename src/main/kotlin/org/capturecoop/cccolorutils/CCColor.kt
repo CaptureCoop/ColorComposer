@@ -99,6 +99,8 @@ class CCColor {
 
     fun ensureSecondaryColor() {
         if(secondaryColor == null) secondaryColor = primaryColor.brighter()
+        if(point1 == null) point1 = POINT_PRIMARY_DEFAULT
+        if(point2 == null) point2 = POINT_SECONDARY_DEFAULT
     }
 
     fun isValidGradient() = secondaryColor != null
@@ -112,8 +114,6 @@ class CCColor {
     fun getGradientPaint(width: Int, height: Int, posX: Int, posY: Int): Paint {
         if(!isGradient) return primaryColor
         ensureSecondaryColor()
-        if(point1 == null) point1 = POINT_PRIMARY_DEFAULT
-        if(point2 == null) point2 = POINT_SECONDARY_DEFAULT
 
         //Long term we should make more convenient functions in CCUtils..
         val point1int = CCVector2Int((point1!!.x * width).toInt(), (point1!!.y * height).toInt())
@@ -155,7 +155,7 @@ class CCColor {
 
     companion object {
         val POINT_PRIMARY_DEFAULT = CCVector2Float(0.0, 0.0)
-        val POINT_SECONDARY_DEFAULT = CCVector2Float(0.0, 0.0)
+        val POINT_SECONDARY_DEFAULT = CCVector2Float(1.0, 1.0)
 
         fun fromSaveString(string: String): CCColor {
             val newColor = CCColor()
