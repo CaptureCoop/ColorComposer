@@ -100,7 +100,7 @@ public class CCHSBHueBar extends JPanel {
         if(buffer == null || !(buffer.getWidth() == getWidth() && buffer.getHeight() == getHeight())) {
             buffer = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
             Graphics bufferGraphics = buffer.getGraphics();
-            bufferGraphics.drawImage(CCColorUtils.createHSVHueBar(sizeX, sizeY, direction), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
+            bufferGraphics.drawImage(CCColorUtils.INSTANCE.createHSVHueBar(sizeX, sizeY, direction), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
             bufferGraphics.dispose();
         }
 

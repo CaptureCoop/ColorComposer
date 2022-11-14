@@ -13,7 +13,7 @@ public class CCColorChooserSinglePreview extends JPanel {
 
     public CCColorChooserSinglePreview(CCColorChooser colorChooser, BufferedImage previewBackground) {
         color = colorChooser.getColor();
-        color.addChangeListener(e -> repaint());
+        color.getChangeListeners().add(e -> repaint());
         this.previewBackground = previewBackground;
     }
 

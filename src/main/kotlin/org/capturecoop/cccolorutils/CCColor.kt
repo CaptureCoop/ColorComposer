@@ -98,7 +98,7 @@ class CCColor {
     }
 
     fun ensureSecondaryColor() {
-        if(secondaryColor == null) secondaryColor = primaryColor?.brighter()
+        if(secondaryColor == null) secondaryColor = primaryColor.brighter()
     }
 
     fun isValidGradient() = secondaryColor != null
@@ -110,7 +110,7 @@ class CCColor {
     fun getGradientPaint(width: Int, height: Int) = getGradientPaint(width, height, 0, 0)
 
     fun getGradientPaint(width: Int, height: Int, posX: Int, posY: Int): Paint {
-        if(!isGradient) return primaryColor!!
+        if(!isGradient) return primaryColor
         ensureSecondaryColor()
         if(point1 == null) point1 = POINT_PRIMARY_DEFAULT
         if(point2 == null) point2 = POINT_SECONDARY_DEFAULT

@@ -30,7 +30,7 @@ public class CCColorChooserGradientPreview extends JPanel {
 
     public CCColorChooserGradientPreview(CCColorChooser colorChooser, BufferedImage previewBackground) {
         color = colorChooser.getColor();
-        color.addChangeListener(e -> repaint());
+        color.getChangeListeners().add(e -> repaint());
         this.previewBackground = previewBackground;
         addMouseListener(new MouseAdapter() {
             @Override
@@ -131,24 +131,24 @@ public class CCColorChooserGradientPreview extends JPanel {
             point2Rect = new Rectangle((startX-offset / 2) + (int) (lastSize * color.getPoint2().getX()), (int) (lastSize * color.getPoint2().getY()), offset, offset);
 
             g2d.setColor(color.getPrimaryColor());
-            CCColorUtils.fillRect(g2d, point1Rect);
-            g2d.setColor(CCColorUtils.getContrastColor(color.getPrimaryColor()));
-            CCColorUtils.drawRect(g2d, point1Rect);
+            CCColorUtils.INSTANCE.fillRect(g2d, point1Rect);
+            g2d.setColor(CCColorUtils.INSTANCE.getContrastColor(color.getPrimaryColor()));
+            CCColorUtils.INSTANCE.drawRect(g2d, point1Rect);
             if(lastPointControlled == 0) {
                 Stroke oldStroke = g2d.getStroke();
                 g2d.setStroke(new BasicStroke(offset/3f));
-                CCColorUtils.drawRect(g2d, point1Rect);
+                CCColorUtils.INSTANCE.drawRect(g2d, point1Rect);
                 g2d.setStroke(oldStroke);
             }
 
             g2d.setColor(color.getSecondaryColor());
-            CCColorUtils.fillRect(g2d, point2Rect);
-            g2d.setColor(CCColorUtils.getContrastColor(color.getSecondaryColor()));
-            CCColorUtils.drawRect(g2d, point2Rect);
+            CCColorUtils.INSTANCE.fillRect(g2d, point2Rect);
+            g2d.setColor(CCColorUtils.INSTANCE.getContrastColor(color.getSecondaryColor()));
+            CCColorUtils.INSTANCE.drawRect(g2d, point2Rect);
             if(lastPointControlled ==1) {
                 Stroke oldStroke = g2d.getStroke();
                 g2d.setStroke(new BasicStroke(offset/3f));
-                CCColorUtils.drawRect(g2d, point2Rect);
+                CCColorUtils.INSTANCE.drawRect(g2d, point2Rect);
                 g2d.setStroke(oldStroke);
             }
 

@@ -134,7 +134,7 @@ public class CCAlphaBar extends JPanel {
                     }
                 }
             }
-            bufferGraphics.drawImage(CCColorUtils.createAlphaBar(backgroundColor, sizeX, sizeY, direction), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
+            bufferGraphics.drawImage(CCColorUtils.INSTANCE.createAlphaBar(backgroundColor, sizeX, sizeY, direction), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
             bufferGraphics.dispose();
             dirty = false;
         }

@@ -28,7 +28,7 @@ public class CCColorChooser extends JFrame implements CCIClosable {
         previewPanel = new CCColorChooserPreviewPanel(this, useGradient, backgroundImage);
 
         colorChangeListener = e -> alertChangeListeners();
-        color.addChangeListener(colorChangeListener);
+        color.getChangeListeners().add(colorChangeListener);
 
         setTitle(title);
         if(icon != null) setIconImage(icon);
@@ -91,7 +91,7 @@ public class CCColorChooser extends JFrame implements CCIClosable {
 
     @Override
     public void close() {
-        color.removeChangeListener(colorChangeListener);
+        color.getChangeListeners().remove(colorChangeListener);
         dispose();
     }
 }

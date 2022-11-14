@@ -59,7 +59,7 @@ public class CCColorChooserSetterPanel extends JPanel {
 
         //Add Listeners
         picker.addChangeListener(e -> {
-            setColor(CCColorUtils.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
+            setColor(CCColorUtils.INSTANCE.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
             alphaBar.setBackgroundColor(color);
             updateSliderListeners();
         });
@@ -67,13 +67,13 @@ public class CCColorChooserSetterPanel extends JPanel {
         hueBar.addChangeListener(e -> {
             float hue = hueBar.getHue();
             picker.setHue(hue);
-            setColor(CCColorUtils.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
+            setColor(CCColorUtils.INSTANCE.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
             alphaBar.setBackgroundColor(color);
             updateSliderListeners();
         });
 
         alphaBar.addChangeListener(e -> {
-            setColor(CCColorUtils.setColorAlpha(color, alphaBar.getAlpha()), true, false);
+            setColor(CCColorUtils.INSTANCE.setColorAlpha(color, alphaBar.getAlpha()), true, false);
             updateSliderListeners();
         });
 
@@ -102,25 +102,25 @@ public class CCColorChooserSetterPanel extends JPanel {
             float hueValue = component.getValue() / 100F;
             picker.setHue(hueValue);
             hueBar.setHue(hueValue);
-            setColor(CCColorUtils.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
+            setColor(CCColorUtils.INSTANCE.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
             updateVisualListeners();
         });
 
         CCSetterManualCombo saturationSlider = createSettings(panel, "Saturation", 0, 100, isSetter, gbc, component -> {
             picker.setSaturation(component.getValue() / 100F);
-            setColor(CCColorUtils.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
+            setColor(CCColorUtils.INSTANCE.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
             updateVisualListeners();
         });
 
         CCSetterManualCombo brightnessSlider = createSettings(panel, "Brightness", 0, 100, isSetter, gbc, component -> {
             picker.setBrightness(component.getValue() / 100F);
-            setColor(CCColorUtils.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
+            setColor(CCColorUtils.INSTANCE.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
             updateVisualListeners();
         });
 
         CCSetterManualCombo alphaSlider = createSettings(panel, "Alpha", 0, 255, isSetter, gbc, component -> {
             alphaBar.setAlpha(component.getValue());
-            setColor(CCColorUtils.setColorAlpha(color, component.getValue()), true, false);
+            setColor(CCColorUtils.INSTANCE.setColorAlpha(color, component.getValue()), true, false);
             updateVisualListeners();
         });
 
@@ -145,22 +145,22 @@ public class CCColorChooserSetterPanel extends JPanel {
         AtomicBoolean isSetter = new AtomicBoolean(false);
 
         CCSetterManualCombo red = createSettings(panel, "Red", 0, 255, isSetter, gbc, component -> {
-            setColor(CCColorUtils.setColorRed(color, component.getValue()), true, false);
+            setColor(CCColorUtils.INSTANCE.setColorRed(color, component.getValue()), true, false);
             updateVisualListeners();
         });
 
         CCSetterManualCombo green = createSettings(panel, "Green", 0, 255, isSetter, gbc, component -> {
-            setColor(CCColorUtils.setColorGreen(color, component.getValue()), true, false);
+            setColor(CCColorUtils.INSTANCE.setColorGreen(color, component.getValue()), true, false);
             updateVisualListeners();
         });
 
         CCSetterManualCombo blue = createSettings(panel, "Blue", 0, 255, isSetter, gbc, component -> {
-            setColor(CCColorUtils.setColorBlue(color, component.getValue()), true, false);
+            setColor(CCColorUtils.INSTANCE.setColorBlue(color, component.getValue()), true, false);
             updateVisualListeners();
         });
 
         CCSetterManualCombo alpha = createSettings(panel, "Alpha", 0, 255, isSetter, gbc, component -> {
-            setColor(CCColorUtils.setColorAlpha(color, component.getValue()), true, false);
+            setColor(CCColorUtils.INSTANCE.setColorAlpha(color, component.getValue()), true, false);
             updateVisualListeners();
         });
 
@@ -226,13 +226,13 @@ public class CCColorChooserSetterPanel extends JPanel {
                     case KeyEvent.VK_ENTER:
                     case KeyEvent.VK_ESCAPE:
                         chooser.requestFocus();
-                        chooser.setColor(CCColor.fromSaveString(textArea.getText()));
+                        chooser.setColor(CCColor.Companion.fromSaveString(textArea.getText()));
                         break;
                 }
             }
         });
 
-        chooser.getColor().addChangeListener(e -> textArea.setText(chooser.getColor().toSaveString()));
+        chooser.getColor().getChangeListeners().add(e -> textArea.setText(chooser.getColor().toSaveString()));
 
         gbc.gridx = 0;
         panel.add(new JLabel("Save String"), gbc);
@@ -242,7 +242,7 @@ public class CCColorChooserSetterPanel extends JPanel {
     }
 
     public void createHexInput(JPanel panel, GridBagConstraints gbc) {
-        JTextField textArea = new JTextField(CCColorUtils.rgb2hex(color));
+        JTextField textArea = new JTextField(CCColorUtils.INSTANCE.rgb2hex(color));
         Dimension size = textArea.getPreferredSize();
         size.width = size.width * 2;
         textArea.setPreferredSize(size);
@@ -253,16 +253,16 @@ public class CCColorChooserSetterPanel extends JPanel {
                     case KeyEvent.VK_ENTER:
                     case KeyEvent.VK_ESCAPE:
                         chooser.requestFocus();
-                        Color temp = CCColorUtils.hex2rgb(textArea.getText());
+                        Color temp = CCColorUtils.INSTANCE.hex2rgb(textArea.getText());
                         if(temp != null)
                             setColor(temp, true, true);
                         else
-                            textArea.setText(CCColorUtils.rgb2hex(color));
+                            textArea.setText(CCColorUtils.INSTANCE.rgb2hex(color));
                         break;
                 }
             }
         });
-        ChangeListener update = e -> textArea.setText(CCColorUtils.rgb2hex(color));
+        ChangeListener update = e -> textArea.setText(CCColorUtils.INSTANCE.rgb2hex(color));
         visualUpdateListeners.add(update);
         sliderUpdateListeners.add(update);
 

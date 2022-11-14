@@ -36,8 +36,8 @@ public class CCColorChooserPreviewPanel extends JPanel{
 
         tabPane.addChangeListener(e -> {
             switch(tabPane.getSelectedIndex()) {
-                case 0: colorChooser.getColor().setIsGradient(false); break;
-                case 1: colorChooser.getColor().setIsGradient(true); break;
+                case 0: colorChooser.getColor().setGradient(false); break;
+                case 1: colorChooser.getColor().setGradient(true); break;
             }
         });
         add(tabPane);

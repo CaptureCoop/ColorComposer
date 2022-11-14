@@ -106,7 +106,7 @@ public class CCHSBPicker extends JPanel {
         int sizeY = getSizeY();
         bufferGraphics.setColor(getBackground());
         bufferGraphics.fillRect(0, 0, getWidth(), getHeight());
-        bufferGraphics.drawImage(CCColorUtils.createHSVBox(getWidth(), getHeight(), hue), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
+        bufferGraphics.drawImage(CCColorUtils.INSTANCE.createHSVBox(getWidth(), getHeight(), hue), MARGIN / 2, MARGIN / 2, sizeX, sizeY, this);
         bufferGraphics.setColor(Color.BLACK);
         bufferGraphics.drawRect(MARGIN / 2 - 1, MARGIN / 2 - 1, sizeX + 1, sizeY + 1);
         bufferGraphics.setColor(Color.GRAY);
@@ -153,6 +153,7 @@ public class CCHSBPicker extends JPanel {
     }
 
     public Color getAsColor() {
-        return new CCHSB(hue, saturation, brightness).toRGB();
+        //TODO: Use proper constructor
+        return new CCHSB(hue, saturation, brightness, 255).asColor();
     }
 }
