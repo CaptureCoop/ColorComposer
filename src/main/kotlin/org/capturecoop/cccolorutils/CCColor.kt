@@ -170,6 +170,16 @@ class CCColor {
         changeListeners.remove(changeListener)
     }
 
+    override fun hashCode(): Int {
+        var result = primaryColor.hashCode()
+        result = 31 * result + (secondaryColor?.hashCode() ?: 0)
+        result = 31 * result + (point1?.hashCode() ?: 0)
+        result = 31 * result + (point2?.hashCode() ?: 0)
+        result = 31 * result + isGradient.hashCode()
+        result = 31 * result + changeListeners.hashCode()
+        return result
+    }
+
     companion object {
         val POINT_PRIMARY_DEFAULT = CCVector2Float(0.0, 0.0)
         val POINT_SECONDARY_DEFAULT = CCVector2Float(1.0, 1.0)
