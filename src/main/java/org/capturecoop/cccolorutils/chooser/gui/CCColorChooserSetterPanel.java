@@ -232,7 +232,7 @@ public class CCColorChooserSetterPanel extends JPanel {
             }
         });
 
-        chooser.getColor().getChangeListeners().add(e -> textArea.setText(chooser.getColor().toSaveString()));
+        chooser.getColor().addChangeListener(e -> {textArea.setText(chooser.getColor().toSaveString());});
 
         gbc.gridx = 0;
         panel.add(new JLabel("Save String"), gbc);

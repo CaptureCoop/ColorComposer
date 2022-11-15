@@ -11,7 +11,7 @@ class CCColorChooserSinglePreview(colorChooser: CCColorChooser, private val prev
     private val color: CCColor = colorChooser.color
 
     init {
-        color.changeListeners.add(ChangeListener { repaint() })
+        color.addChangeListener{ repaint() }
     }
 
     override fun paint(g: Graphics) {

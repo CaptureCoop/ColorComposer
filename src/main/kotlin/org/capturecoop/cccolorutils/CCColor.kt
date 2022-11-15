@@ -42,7 +42,7 @@ class CCColor {
             alertChangeListeners()
         }
 
-    val changeListeners = ArrayList<ChangeListener>()
+    private val changeListeners = ArrayList<ChangeListener>()
     enum class ColorType { PRIMARY, SECONDARY }
 
     constructor() {
@@ -156,6 +156,18 @@ class CCColor {
                 isGradient == other.isGradient &&
                 point1 == other.point1 &&
                 point2 == other.point2
+    }
+
+    fun addChangeListener(action: (ChangeEvent) -> Unit) {
+        changeListeners.add(ChangeListener { action.invoke(ChangeEvent(this)) })
+    }
+
+    fun addChangeListener(changeListener: ChangeListener) {
+        changeListeners.add(changeListener)
+    }
+
+    fun removeChangeListener(changeListener: ChangeListener) {
+        changeListeners.remove(changeListener)
     }
 
     companion object {

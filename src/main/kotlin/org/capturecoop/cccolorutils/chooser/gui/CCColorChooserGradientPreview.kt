@@ -26,7 +26,7 @@ class CCColorChooserGradientPreview(colorChooser: CCColorChooser, private val pr
     private var previewBuffer: BufferedImage? = null
 
     init {
-        color.changeListeners.add(ChangeListener { repaint() })
+        color.addChangeListener { repaint() }
         addMouseListener(object : MouseAdapter() {
             override fun mouseClicked(mouseEvent: MouseEvent) = mousePressedEvent(mouseEvent)
             override fun mousePressed(mouseEvent: MouseEvent) = mousePressedEvent(mouseEvent)

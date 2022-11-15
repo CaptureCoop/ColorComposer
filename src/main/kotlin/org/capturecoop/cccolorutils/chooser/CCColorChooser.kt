@@ -32,7 +32,7 @@ class CCColorChooser(color: CCColor = CCColor(Color.WHITE), title: String = "Col
         setterPanel = CCColorChooserSetterPanel(color.primaryColor, this)
         previewPanel = CCColorChooserPreviewPanel(this, useGradient, backgroundImage)
         colorChangeListener = ChangeListener { alertChangeListeners() }
-        color.changeListeners.add(colorChangeListener)
+        color.addChangeListener(colorChangeListener)
         setTitle(title)
         if (icon != null) iconImage = icon
         init(x, y)
@@ -67,7 +67,7 @@ class CCColorChooser(color: CCColor = CCColor(Color.WHITE), title: String = "Col
     }
 
     override fun close() {
-        color.changeListeners.remove(colorChangeListener)
+        color.removeChangeListener(colorChangeListener)
         dispose()
     }
 }
