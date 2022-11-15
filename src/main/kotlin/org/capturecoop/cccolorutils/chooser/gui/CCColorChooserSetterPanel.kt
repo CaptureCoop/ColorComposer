@@ -38,11 +38,12 @@ class CCColorChooserSetterPanel(var color: Color, private val chooser: CCColorCh
         hueBar.preferredSize = Dimension(32, 256)
         alphaBar.preferredSize = Dimension(32, 256)
         visualUpdateListeners.add(ChangeListener {
-            val hsb = CCHSB(color)
-            picker.hue = hsb.hue
-            picker.saturation = hsb.saturation
-            picker.brightness = hsb.brightness
-            hueBar.hue = hsb.hue
+            CCHSB(color).also { hsb ->
+                picker.hue = hsb.hue
+                picker.saturation = hsb.saturation
+                picker.brightness = hsb.brightness
+                hueBar.hue = hsb.hue
+            }
             alphaBar.setBackgroundColor(color)
             alphaBar.setAlpha(color.alpha)
         })
@@ -87,26 +88,26 @@ class CCColorChooserSetterPanel(var color: Color, private val chooser: CCColorCh
         val gbc = GridBagConstraints()
         gbc.insets = Insets(5, 5, 5, 5)
         val isSetter = AtomicBoolean(false)
-        val hue = createSettings(panel, "Hue", 0, 100, isSetter, gbc) { component: CCSetterManualCombo? ->
-            val hueValue = component!!.getValue() / 100f
+        val hue = createSettings(panel, "Hue", 0, 100, isSetter, gbc) {
+            val hueValue = it!!.getValue() / 100f
             picker.hue = hueValue
             hueBar.hue = hueValue
             setColor(setColorAlpha(picker.color, color.alpha), true, false)
             updateVisualListeners()
         }
-        val saturationSlider = createSettings(panel, "Saturation", 0, 100, isSetter, gbc) { component: CCSetterManualCombo? ->
-                picker.saturation = component!!.getValue() / 100f
+        val saturationSlider = createSettings(panel, "Saturation", 0, 100, isSetter, gbc) {
+                picker.saturation = it!!.getValue() / 100f
                 setColor(setColorAlpha(picker.color, color.alpha), true, false)
                 updateVisualListeners()
             }
-        val brightnessSlider = createSettings(panel, "Brightness", 0, 100, isSetter, gbc) { component: CCSetterManualCombo? ->
-                picker.brightness = component!!.getValue() / 100f
+        val brightnessSlider = createSettings(panel, "Brightness", 0, 100, isSetter, gbc) {
+                picker.brightness = it!!.getValue() / 100f
                 setColor(setColorAlpha(picker.color, color.alpha), true, false)
                 updateVisualListeners()
             }
-        val alphaSlider = createSettings(panel, "Alpha", 0, 255, isSetter, gbc) { component: CCSetterManualCombo? ->
-            alphaBar.setAlpha(component!!.getValue())
-            setColor(setColorAlpha(color, component.getValue()), true, false)
+        val alphaSlider = createSettings(panel, "Alpha", 0, 255, isSetter, gbc) {
+            alphaBar.setAlpha(it!!.getValue())
+            setColor(setColorAlpha(color, it.getValue()), true, false)
             updateVisualListeners()
         }
         createHexInput(panel, gbc)

@@ -40,7 +40,7 @@ class CCColorChooserGradientPreview(colorChooser: CCColorChooser, private val pr
                 } else if (point2Rect != null && point2Rect!!.contains(mouseEvent.point)) {
                     pointControlled = 1
                     lastPointControlled = 1
-                    colorChooser.setterPanel.setColor(color.secondaryColor, false, true)
+                    colorChooser.setterPanel.setColor(color.secondaryColor!!, false, true)
                 }
                 repaint()
             }
