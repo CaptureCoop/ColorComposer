@@ -31,7 +31,7 @@ class CCColorChooser(color: CCColor = CCColor(Color.WHITE), title: String = "Col
     init {
         setterPanel = CCColorChooserSetterPanel(color.primaryColor, this)
         previewPanel = CCColorChooserPreviewPanel(this, useGradient, backgroundImage)
-        colorChangeListener = ChangeListener { e: ChangeEvent? -> alertChangeListeners() }
+        colorChangeListener = ChangeListener { alertChangeListeners() }
         color.changeListeners.add(colorChangeListener)
         setTitle(title)
         if (icon != null) iconImage = icon
@@ -62,7 +62,7 @@ class CCColorChooser(color: CCColor = CCColor(Color.WHITE), title: String = "Col
         isVisible = true
     }
 
-    fun alertChangeListeners() {
+    private fun alertChangeListeners() {
         changeListeners.forEach { it.stateChanged(ChangeEvent(this)) }
     }
 

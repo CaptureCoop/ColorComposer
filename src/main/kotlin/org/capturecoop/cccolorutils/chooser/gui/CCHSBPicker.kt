@@ -69,8 +69,8 @@ class CCHSBPicker(color: Color?, alwaysGrab: Boolean) : JPanel() {
         dirty = true
         val percentageX = x * 100f / width
         val percentageY = y * 100f / height
-        val pointX = CCVector2Float((percentageX / 100f).toDouble(), 0.0).limitX(0f, 1f).x
-        var pointY = CCVector2Float((percentageY / 100f).toDouble(), 0.0).limitX(0f, 1f).x
+        val pointX = CCVector2Float(percentageX / 100f, 0.0F).limitX(0f, 1f).x
+        var pointY = CCVector2Float(percentageY / 100f, 0.0F).limitX(0f, 1f).x
         pointY = (pointY - 1) * -1
         saturation = pointX
         brightness = pointY

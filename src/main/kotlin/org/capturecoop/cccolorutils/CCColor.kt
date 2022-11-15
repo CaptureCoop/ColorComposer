@@ -116,8 +116,8 @@ class CCColor {
         ensureSecondaryColor()
 
         //Long term we should make more convenient functions in CCUtils..
-        val point1int = CCVector2Int((point1!!.x * width).toInt(), (point1!!.y * height).toInt())
-        val point2int = CCVector2Int((point2!!.x * width).toInt(), (point2!!.y * height).toInt())
+        val point1int = CCVector2Int(point1!!.x * width, point1!!.y * height)
+        val point2int = CCVector2Int(point2!!.x * width, point2!!.y * height)
         return GradientPaint((point1int.x + posX).toFloat(), (point1int.y + posY).toFloat(), primaryColor, (point2int.x + posX).toFloat(), (point2int.y + posY).toFloat(), secondaryColor);
     }
 
