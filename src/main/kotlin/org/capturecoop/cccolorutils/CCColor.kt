@@ -122,19 +122,24 @@ class CCColor {
     }
 
     fun toSaveString(): String {
-        var string = CCColorUtils.rgb2hex(primaryColor)
-        if(primaryColor.alpha != 255)
-            string += "_a${primaryColor.alpha}"
-        if(point1 != null && point1 != POINT_PRIMARY_DEFAULT)
-            string += "_x${point1!!.x}_y${point1!!.y}"
-        string += "_G${isGradient}"
+        fun alpha(c: Color) = if(c.alpha == 255) "" else "_a${c.alpha}"
+        fun pos(type: ColorType): String{
+            fun p(p: CCVector2Float?) = if(p != null) "_x${p.x}_y${p.y}" else ""
+            return when(type) {
+                ColorType.PRIMARY -> if (point1 != POINT_PRIMARY_DEFAULT) p(point1) else ""
+                ColorType.SECONDARY -> if(point2 != POINT_SECONDARY_DEFAULT) p(point2) else ""
+            }
+        }
+
+        var string = primaryColor.toHex() //Primary color
+        string += alpha(primaryColor) //Primary alpha
+        string += pos(ColorType.PRIMARY) //Primary point
+        string += "_G$isGradient" //If color is a gradient
 
         if(secondaryColor != null) {
-            string += "___${CCColorUtils.rgb2hex(secondaryColor!!)}"
-            if(secondaryColor!!.alpha != 255)
-                string += "_a${secondaryColor!!.alpha}"
-            if(point2 != null && point2 != POINT_SECONDARY_DEFAULT)
-                string += "_x${point2!!.x}_y${point2!!.y}"
+            string += "___${secondaryColor!!.toHex()}"
+            string += alpha(secondaryColor!!)
+            string += pos(ColorType.SECONDARY)
         }
         return string
     }
