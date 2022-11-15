@@ -35,8 +35,10 @@ class CCColorChooserSetterPanel(var color: Color, private val chooser: CCColorCh
 
         //Set size
         picker.preferredSize = Dimension(256, 256)
-        hueBar.preferredSize = Dimension(32, 256)
-        alphaBar.preferredSize = Dimension(32, 256)
+        Dimension(32, 256).also {
+            hueBar.preferredSize = it
+            alphaBar.preferredSize = it
+        }
         visualUpdateListeners.add(ChangeListener {
             CCHSB(color).also { hsb ->
                 picker.hue = hsb.hue
