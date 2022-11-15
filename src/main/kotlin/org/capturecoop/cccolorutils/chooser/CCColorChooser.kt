@@ -11,12 +11,13 @@ import java.awt.Toolkit
 import java.awt.image.BufferedImage
 import javax.swing.BoxLayout
 import javax.swing.JButton
+import javax.swing.JComponent
 import javax.swing.JFrame
 import javax.swing.JPanel
 import javax.swing.event.ChangeEvent
 import javax.swing.event.ChangeListener
 
-class CCColorChooser(color: CCColor = CCColor(Color.WHITE), title: String = "Color Chooser", x: Int = -Integer.MAX_VALUE, y: Int = -Integer.MAX_VALUE, useGradient: Boolean = color.isGradient, backgroundImage: BufferedImage? = null, icon: BufferedImage? = null): JFrame(), CCIClosable {
+class CCColorChooser(color: CCColor = CCColor(Color.WHITE), title: String = "Color Chooser", parent: JFrame? = null, x: Int = -Integer.MAX_VALUE, y: Int = -Integer.MAX_VALUE, useGradient: Boolean = color.isGradient, backgroundImage: BufferedImage? = null, icon: BufferedImage? = null): JFrame(), CCIClosable {
     var color: CCColor = color
         set(value) {
             color.loadFromCCColor(value)
@@ -35,10 +36,10 @@ class CCColorChooser(color: CCColor = CCColor(Color.WHITE), title: String = "Col
         color.addChangeListener(colorChangeListener)
         setTitle(title)
         if (icon != null) iconImage = icon
-        init(x, y)
+        init(x, y, parent)
     }
 
-    private fun init(x: Int, y: Int) {
+    private fun init(x: Int, y: Int, parent: JFrame?) {
         val mainPanel = JPanel()
         val submitButtonPanel = JPanel()
         val submit = JButton("Okay")
@@ -54,10 +55,14 @@ class CCColorChooser(color: CCColor = CCColor(Color.WHITE), title: String = "Col
         submit.preferredSize = Dimension(width / 2, 50)
         submitButtonPanel.add(submit)
         pack()
-        Toolkit.getDefaultToolkit().screenSize.also {
-            val posX = if(x != -Integer.MAX_VALUE) x else it.width / 2 - width / 2
-            val posY = if(y != -Integer.MAX_VALUE) y else it.height / 2 - height / 2
-            location = Point(posX, posY)
+        if(parent == null) {
+            Toolkit.getDefaultToolkit().screenSize.also {
+                val posX = if(x != -Integer.MAX_VALUE) x else it.width / 2 - width / 2
+                val posY = if(y != -Integer.MAX_VALUE) y else it.height / 2 - height / 2
+                location = Point(posX, posY)
+            }
+        } else {
+            location = Point(parent.location.x + parent.width / 2 - width / 2, parent.location.y + parent.height  / 2 - height / 2)
         }
         isVisible = true
     }
