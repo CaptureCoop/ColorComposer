@@ -59,7 +59,7 @@ public class CCColorChooserSetterPanel extends JPanel {
 
         //Add Listeners
         picker.addChangeListener(e -> {
-            setColor(CCColorUtils.INSTANCE.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
+            setColor(CCColorUtils.INSTANCE.setColorAlpha(picker.getColor(), color.getAlpha()), true, false);
             alphaBar.setBackgroundColor(color);
             updateSliderListeners();
         });
@@ -67,7 +67,7 @@ public class CCColorChooserSetterPanel extends JPanel {
         hueBar.addChangeListener(e -> {
             float hue = hueBar.getHue();
             picker.setHue(hue);
-            setColor(CCColorUtils.INSTANCE.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
+            setColor(CCColorUtils.INSTANCE.setColorAlpha(picker.getColor(), color.getAlpha()), true, false);
             alphaBar.setBackgroundColor(color);
             updateSliderListeners();
         });
@@ -102,19 +102,19 @@ public class CCColorChooserSetterPanel extends JPanel {
             float hueValue = component.getValue() / 100F;
             picker.setHue(hueValue);
             hueBar.setHue(hueValue);
-            setColor(CCColorUtils.INSTANCE.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
+            setColor(CCColorUtils.INSTANCE.setColorAlpha(picker.getColor(), color.getAlpha()), true, false);
             updateVisualListeners();
         });
 
         CCSetterManualCombo saturationSlider = createSettings(panel, "Saturation", 0, 100, isSetter, gbc, component -> {
             picker.setSaturation(component.getValue() / 100F);
-            setColor(CCColorUtils.INSTANCE.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
+            setColor(CCColorUtils.INSTANCE.setColorAlpha(picker.getColor(), color.getAlpha()), true, false);
             updateVisualListeners();
         });
 
         CCSetterManualCombo brightnessSlider = createSettings(panel, "Brightness", 0, 100, isSetter, gbc, component -> {
             picker.setBrightness(component.getValue() / 100F);
-            setColor(CCColorUtils.INSTANCE.setColorAlpha(picker.getAsColor(), color.getAlpha()), true, false);
+            setColor(CCColorUtils.INSTANCE.setColorAlpha(picker.getColor(), color.getAlpha()), true, false);
             updateVisualListeners();
         });
 
