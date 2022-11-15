@@ -2,6 +2,7 @@ package org.capturecoop.cccolorutils.chooser.gui
 
 import org.capturecoop.cccolorutils.CCColorUtils.DIRECTION
 import org.capturecoop.cccolorutils.CCColorUtils.createAlphaBar
+import org.capturecoop.cccolorutils.fill
 import org.capturecoop.ccutils.math.CCVector2Float
 import java.awt.Color
 import java.awt.Graphics
@@ -98,8 +99,7 @@ class CCAlphaBar(private var backgroundColor: Color, private val direction: DIRE
         g.color = Color.BLACK
         g.drawRect(MARGIN / 2 - 1, MARGIN / 2 - 1, sizeX + 1, sizeY + 1)
         g.color = Color.GRAY
-        val rect = selectRect
-        g.fillRect(rect.x, rect.y, rect.width, rect.height)
+        selectRect.fill(g)
     }
 
     fun addChangeListener(listener: ChangeListener) {
