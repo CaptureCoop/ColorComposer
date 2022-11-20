@@ -8,10 +8,11 @@ import java.awt.Color
 import java.awt.Dimension
 import java.awt.Point
 import java.awt.Toolkit
+import java.awt.event.WindowAdapter
+import java.awt.event.WindowEvent
 import java.awt.image.BufferedImage
 import javax.swing.BoxLayout
 import javax.swing.JButton
-import javax.swing.JComponent
 import javax.swing.JFrame
 import javax.swing.JPanel
 import javax.swing.event.ChangeEvent
@@ -22,12 +23,13 @@ class CCColorChooser(color: CCColor = CCColor(Color.WHITE), title: String = "Col
         set(value) {
             color.loadFromCCColor(value)
             //Update setter, preview panel updates automatically via a listener in cccolor
-            setterPanel.setColor(color.primaryColor, true, true)
+            setterPanel.setColor(color.primaryColor, alertListeners = true, updateComponents = true)
         }
     private val previewPanel: CCColorChooserPreviewPanel
     val setterPanel: CCColorChooserSetterPanel
-    val changeListeners = ArrayList<ChangeListener>()
+    private val changeListeners = ArrayList<ChangeListener>()
     private val colorChangeListener: ChangeListener
+    private var onClose: ((CCColorChooser) -> (Unit))? = null
 
     init {
         setterPanel = CCColorChooserSetterPanel(color.primaryColor, this)
@@ -65,13 +67,23 @@ class CCColorChooser(color: CCColor = CCColor(Color.WHITE), title: String = "Col
             location = Point(parent.location.x + parent.width / 2 - width / 2, parent.location.y + parent.height  / 2 - height / 2)
         }
         isVisible = true
+        addWindowListener(object: WindowAdapter() {
+            override fun windowClosing(e: WindowEvent?) {
+                close()
+            }
+        })
     }
 
     private fun alertChangeListeners() {
         changeListeners.forEach { it.stateChanged(ChangeEvent(this)) }
     }
 
+    fun setOnClose(action: (CCColorChooser) -> (Unit)) {
+        onClose = action
+    }
+
     override fun close() {
+        onClose?.invoke(this)
         color.removeChangeListener(colorChangeListener)
         dispose()
     }
