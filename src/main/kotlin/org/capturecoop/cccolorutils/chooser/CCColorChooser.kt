@@ -21,7 +21,7 @@ import javax.swing.event.ChangeListener
 class CCColorChooser(color: CCColor = CCColor(Color.WHITE), title: String = "Color Chooser", parent: JFrame? = null, x: Int = -Integer.MAX_VALUE, y: Int = -Integer.MAX_VALUE, useGradient: Boolean = color.isGradient, backgroundImage: BufferedImage? = null, icon: BufferedImage? = null): JFrame(), CCIClosable {
     var color: CCColor = color
         set(value) {
-            color.loadFromCCColor(value)
+            field = value
             //Update setter, preview panel updates automatically via a listener in cccolor
             setterPanel.setColor(color.primaryColor, alertListeners = true, updateComponents = true)
         }
