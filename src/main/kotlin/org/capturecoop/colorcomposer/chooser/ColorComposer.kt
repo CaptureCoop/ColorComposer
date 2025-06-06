@@ -2,7 +2,7 @@ package org.capturecoop.colorcomposer.chooser
 
 
 import org.capturecoop.colorcomposer.ComposedColor
-import org.capturecoop.utils.org.capturecoop.defaultdepot.Closable
+import org.capturecoop.defaultdepot.Closable
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.Point

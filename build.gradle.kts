@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.CaptureCoop:defaultdepot:3d64cdaf6b")
+    implementation("com.github.CaptureCoop:defaultdepot:5a221a7052")
 }
 
 kotlin {
