@@ -12,8 +12,8 @@ import java.awt.event.MouseMotionAdapter
 import java.awt.image.BufferedImage
 import javax.swing.JPanel
 
-class ColorChooserGradientPreview(colorChooser: ColorChooser, private val previewBackground: BufferedImage?) : JPanel() {
-    private val color: ComposedColor = colorChooser.color
+class ColorComposerGradientPreview(colorComposer: ColorComposer, private val previewBackground: BufferedImage?) : JPanel() {
+    private val color: ComposedColor = colorComposer.color
     private var lastStartX = 0
     private var lastStartY = 0
     private var lastSize = 0
@@ -34,11 +34,11 @@ class ColorChooserGradientPreview(colorChooser: ColorChooser, private val previe
                 if (point1Rect != null && point1Rect!!.contains(mouseEvent.point)) {
                     pointControlled = 0
                     lastPointControlled = 0
-                    colorChooser.setterPanel.setColor(color.primaryColor, false, true)
+                    colorComposer.setterPanel.setColor(color.primaryColor, false, true)
                 } else if (point2Rect != null && point2Rect!!.contains(mouseEvent.point)) {
                     pointControlled = 1
                     lastPointControlled = 1
-                    colorChooser.setterPanel.setColor(color.secondaryColor!!, false, true)
+                    colorComposer.setterPanel.setColor(color.secondaryColor!!, false, true)
                 }
                 repaint()
             }

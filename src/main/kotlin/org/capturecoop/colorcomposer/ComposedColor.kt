@@ -87,7 +87,7 @@ class ComposedColor {
         ColorType.SECONDARY -> secondaryColor
     }
 
-    fun loadFromCCColor(otherColor: ComposedColor) {
+    fun loadFromComposedColor(otherColor: ComposedColor) {
         primaryColor = otherColor.primaryColor
         secondaryColor = otherColor.secondaryColor
         point1 = otherColor.point1

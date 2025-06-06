@@ -1,5 +1,5 @@
-import org.capturecoop.colorcomposer.chooser.ColorChooser
+import org.capturecoop.colorcomposer.chooser.ColorComposer
 
 fun main() {
-    ColorChooser()
+    ColorComposer(useGradient = true)
 }

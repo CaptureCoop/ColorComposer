@@ -9,7 +9,7 @@ import javax.swing.*
 import javax.swing.event.ChangeEvent
 import javax.swing.event.ChangeListener
 
-class ColorChooserSetterPanel(var color: Color, private val chooser: ColorChooser) : JPanel() {
+class ColorChooserSetterPanel(var color: Color, private val chooser: ColorComposer) : JPanel() {
     private val changeListeners = ArrayList<ChangeListener>()
     private val sliderUpdateListeners = ArrayList<ChangeListener>()
     private val visualUpdateListeners = ArrayList<ChangeListener>()
@@ -102,7 +102,7 @@ class ColorChooserSetterPanel(var color: Color, private val chooser: ColorChoose
             updateVisualListeners()
         }
         createHexInput(panel, gbc)
-        createCCColorFormatField(panel, gbc)
+        createComposedColorFormatField(panel, gbc)
         sliderUpdateListeners.add(ChangeListener {
             isSetter.set(true)
             hue.setValue((picker.hue * 100f).toInt())
@@ -136,7 +136,7 @@ class ColorChooserSetterPanel(var color: Color, private val chooser: ColorChoose
             updateVisualListeners()
         }
         createHexInput(panel, gbc)
-        createCCColorFormatField(panel, gbc)
+        createComposedColorFormatField(panel, gbc)
         sliderUpdateListeners.add(ChangeListener {
             isSetter.set(true)
             red.setValue(color.red)
@@ -174,7 +174,7 @@ class ColorChooserSetterPanel(var color: Color, private val chooser: ColorChoose
         return SetterManualCombo(slider, spinner)
     }
 
-    private fun createCCColorFormatField(panel: JPanel, gbc: GridBagConstraints) {
+    private fun createComposedColorFormatField(panel: JPanel, gbc: GridBagConstraints) {
         val textArea = JTextField(chooser.color.toSaveString())
         val size = textArea.preferredSize
         size.width = size.width * 3

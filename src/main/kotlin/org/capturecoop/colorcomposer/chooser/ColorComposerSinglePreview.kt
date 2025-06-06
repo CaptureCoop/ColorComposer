@@ -5,8 +5,8 @@ import java.awt.Graphics
 import java.awt.image.BufferedImage
 import javax.swing.JPanel
 
-class ColorChooserSinglePreview(colorChooser: ColorChooser, private val previewBackground: BufferedImage?) : JPanel() {
-    private val color: ComposedColor = colorChooser.color
+class ColorComposerSinglePreview(colorComposer: ColorComposer, private val previewBackground: BufferedImage?) : JPanel() {
+    private val color: ComposedColor = colorComposer.color
 
     init {
         color.addChangeListener{ repaint() }

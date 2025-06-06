@@ -17,9 +17,9 @@ import javax.swing.JPanel
 import javax.swing.event.ChangeEvent
 import javax.swing.event.ChangeListener
 
-class ColorChooser(
+class ColorComposer(
     color: ComposedColor = ComposedColor(Color.WHITE),
-    title: String = "Color Chooser",
+    title: String = "Color Composer",
     parent: JFrame? = null,
     x: Int = -Integer.MAX_VALUE,
     y: Int = -Integer.MAX_VALUE,
@@ -30,18 +30,18 @@ class ColorChooser(
     var color: ComposedColor = color
         set(value) {
             field = value
-            //Update setter, preview panel updates automatically via a listener in cccolor
+            //Update setter, preview panel updates automatically via a listener in ComposedColor
             setterPanel.setColor(color.primaryColor, alertListeners = true, updateComponents = true)
         }
-    private val previewPanel: ColorChooserPreviewPanel
+    private val previewPanel: ColorComposerPreviewPanel
     val setterPanel: ColorChooserSetterPanel
     private val changeListeners = ArrayList<ChangeListener>()
     private val colorChangeListener: ChangeListener
-    private var onClose: ((ColorChooser) -> (Unit))? = null
+    private var onClose: ((ColorComposer) -> (Unit))? = null
 
     init {
         setterPanel = ColorChooserSetterPanel(color.primaryColor, this)
-        previewPanel = ColorChooserPreviewPanel(this, useGradient, backgroundImage)
+        previewPanel = ColorComposerPreviewPanel(this, useGradient, backgroundImage)
         colorChangeListener = ChangeListener { alertChangeListeners() }
         color.addChangeListener(colorChangeListener)
         setTitle(title)
@@ -89,7 +89,7 @@ class ColorChooser(
         changeListeners.forEach { it.stateChanged(ChangeEvent(this)) }
     }
 
-    fun setOnClose(action: (ColorChooser) -> (Unit)) {
+    fun setOnClose(action: (ColorComposer) -> (Unit)) {
         onClose = action
     }
 
