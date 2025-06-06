@@ -7,7 +7,7 @@ import java.awt.Paint
 import javax.swing.event.ChangeEvent
 import javax.swing.event.ChangeListener
 
-class ColorPlus {
+class ComposedColor {
     var primaryColor: Color
         set(value) {
             field = value
@@ -52,7 +52,7 @@ class ColorPlus {
         primaryColor = color
     }
 
-    constructor(color: ColorPlus) {
+    constructor(color: ComposedColor) {
         primaryColor = color.primaryColor
         secondaryColor = color.secondaryColor
         isGradient = color.isGradient
@@ -60,7 +60,7 @@ class ColorPlus {
         color.point2?.let { point2 = it }
     }
 
-    constructor(color: ColorPlus, alpha: Int) {
+    constructor(color: ComposedColor, alpha: Int) {
         color.primaryColor.let { primaryColor = it.setAlpha(alpha) }
         color.secondaryColor?.let { secondaryColor = it.setAlpha(alpha) }
         isGradient = color.isGradient
@@ -87,7 +87,7 @@ class ColorPlus {
         ColorType.SECONDARY -> secondaryColor
     }
 
-    fun loadFromCCColor(otherColor: ColorPlus) {
+    fun loadFromCCColor(otherColor: ComposedColor) {
         primaryColor = otherColor.primaryColor
         secondaryColor = otherColor.secondaryColor
         point1 = otherColor.point1
@@ -147,7 +147,7 @@ class ColorPlus {
 
     override fun equals(other: Any?): Boolean {
         if(other == null || other != this) return false
-        if(other !is ColorPlus) return false
+        if(other !is ComposedColor) return false
         return primaryColor.rgb == other.primaryColor.rgb &&
                 primaryColor.alpha == other.primaryColor.alpha &&
                 secondaryColor?.rgb == other.secondaryColor?.rgb &&
@@ -183,8 +183,8 @@ class ColorPlus {
         val POINT_PRIMARY_DEFAULT = Vector2F(0.0, 0.0)
         val POINT_SECONDARY_DEFAULT = Vector2F(1.0, 1.0)
 
-        fun fromSaveString(string: String): ColorPlus {
-            val newColor = ColorPlus()
+        fun fromSaveString(string: String): ComposedColor {
+            val newColor = ComposedColor()
             string.split("___").forEachIndexed{ i, part ->
                 var alpha = -1
                 var color: Color? = null

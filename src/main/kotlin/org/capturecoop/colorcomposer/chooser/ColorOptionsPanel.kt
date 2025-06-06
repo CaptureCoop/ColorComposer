@@ -1,6 +1,6 @@
 package org.capturecoop.colorcomposer.chooser
 
-import org.capturecoop.colorcomposer.ColorPlus
+import org.capturecoop.colorcomposer.ComposedColor
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.Graphics
@@ -23,14 +23,14 @@ class ColorOptionsPanel: JPanel() {
             Color.CYAN,
             Color.YELLOW,
             Color.ORANGE
-        ).map { ColorPlus(it) }.forEach {
-            colors.add(ColorButton(ColorPlus(it)))
+        ).map { ComposedColor(it) }.forEach {
+            colors.add(ColorButton(ComposedColor(it)))
         }
         add(colors)
     }
 }
 
-class ColorButton(val color: ColorPlus): JPanel() {
+class ColorButton(val color: ComposedColor): JPanel() {
     init {
         preferredSize = Dimension(64, 64)
         revalidate()

@@ -186,7 +186,7 @@ class ColorChooserSetterPanel(var color: Color, private val chooser: ColorChoose
                 when (e.keyCode) {
                     KeyEvent.VK_ENTER, KeyEvent.VK_ESCAPE -> {
                         chooser.requestFocus()
-                        chooser.color = ColorPlus.fromSaveString(textArea.text)
+                        chooser.color = ComposedColor.fromSaveString(textArea.text)
                     }
                 }
             }

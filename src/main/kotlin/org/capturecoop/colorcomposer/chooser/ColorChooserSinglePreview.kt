@@ -1,12 +1,12 @@
 package org.capturecoop.colorcomposer.chooser
 
-import org.capturecoop.colorcomposer.ColorPlus
+import org.capturecoop.colorcomposer.ComposedColor
 import java.awt.Graphics
 import java.awt.image.BufferedImage
 import javax.swing.JPanel
 
 class ColorChooserSinglePreview(colorChooser: ColorChooser, private val previewBackground: BufferedImage?) : JPanel() {
-    private val color: ColorPlus = colorChooser.color
+    private val color: ComposedColor = colorChooser.color
 
     init {
         color.addChangeListener{ repaint() }

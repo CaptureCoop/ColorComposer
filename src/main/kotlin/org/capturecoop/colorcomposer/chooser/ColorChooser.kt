@@ -1,7 +1,7 @@
 package org.capturecoop.colorcomposer.chooser
 
 
-import org.capturecoop.colorcomposer.ColorPlus
+import org.capturecoop.colorcomposer.ComposedColor
 import org.capturecoop.utils.org.capturecoop.defaultdepot.Closable
 import java.awt.Color
 import java.awt.Dimension
@@ -18,7 +18,7 @@ import javax.swing.event.ChangeEvent
 import javax.swing.event.ChangeListener
 
 class ColorChooser(
-    color: ColorPlus = ColorPlus(Color.WHITE),
+    color: ComposedColor = ComposedColor(Color.WHITE),
     title: String = "Color Chooser",
     parent: JFrame? = null,
     x: Int = -Integer.MAX_VALUE,
@@ -27,7 +27,7 @@ class ColorChooser(
     backgroundImage: BufferedImage? = null,
     icon: BufferedImage? = null
 ): JFrame(), Closable {
-    var color: ColorPlus = color
+    var color: ComposedColor = color
         set(value) {
             field = value
             //Update setter, preview panel updates automatically via a listener in cccolor

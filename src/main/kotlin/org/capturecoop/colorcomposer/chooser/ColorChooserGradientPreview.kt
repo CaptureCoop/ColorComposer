@@ -1,6 +1,6 @@
 package org.capturecoop.colorcomposer.chooser
 
-import org.capturecoop.colorcomposer.ColorPlus
+import org.capturecoop.colorcomposer.ComposedColor
 import org.capturecoop.colorcomposer.ColorUtils
 import org.capturecoop.colorcomposer.draw
 import org.capturecoop.colorcomposer.fill
@@ -13,7 +13,7 @@ import java.awt.image.BufferedImage
 import javax.swing.JPanel
 
 class ColorChooserGradientPreview(colorChooser: ColorChooser, private val previewBackground: BufferedImage?) : JPanel() {
-    private val color: ColorPlus = colorChooser.color
+    private val color: ComposedColor = colorChooser.color
     private var lastStartX = 0
     private var lastStartY = 0
     private var lastSize = 0
