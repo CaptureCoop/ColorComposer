@@ -1,9 +1,8 @@
-package org.capturecoop.cccolorutils.chooser
+package org.capturecoop.colorcomposer.chooser
 
-import org.capturecoop.cccolorutils.CCColor
-import org.capturecoop.cccolorutils.chooser.gui.CCColorChooserPreviewPanel
-import org.capturecoop.cccolorutils.chooser.gui.CCColorChooserSetterPanel
-import org.capturecoop.ccutils.utils.CCIClosable
+
+import org.capturecoop.colorcomposer.ComposedColor
+import org.capturecoop.defaultdepot.Closable
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.Point
@@ -18,22 +17,31 @@ import javax.swing.JPanel
 import javax.swing.event.ChangeEvent
 import javax.swing.event.ChangeListener
 
-class CCColorChooser(color: CCColor = CCColor(Color.WHITE), title: String = "Color Chooser", parent: JFrame? = null, x: Int = -Integer.MAX_VALUE, y: Int = -Integer.MAX_VALUE, useGradient: Boolean = color.isGradient, backgroundImage: BufferedImage? = null, icon: BufferedImage? = null): JFrame(), CCIClosable {
-    var color: CCColor = color
+class ColorComposer(
+    color: ComposedColor = ComposedColor(Color.WHITE),
+    title: String = "Color Composer",
+    parent: JFrame? = null,
+    x: Int = -Integer.MAX_VALUE,
+    y: Int = -Integer.MAX_VALUE,
+    useGradient: Boolean = color.isGradient,
+    backgroundImage: BufferedImage? = null,
+    icon: BufferedImage? = null
+): JFrame(), Closable {
+    var color: ComposedColor = color
         set(value) {
             field = value
-            //Update setter, preview panel updates automatically via a listener in cccolor
+            //Update setter, preview panel updates automatically via a listener in ComposedColor
             setterPanel.setColor(color.primaryColor, alertListeners = true, updateComponents = true)
         }
-    private val previewPanel: CCColorChooserPreviewPanel
-    val setterPanel: CCColorChooserSetterPanel
+    private val previewPanel: ColorComposerPreviewPanel
+    val setterPanel: ColorChooserSetterPanel
     private val changeListeners = ArrayList<ChangeListener>()
     private val colorChangeListener: ChangeListener
-    private var onClose: ((CCColorChooser) -> (Unit))? = null
+    private var onClose: ((ColorComposer) -> (Unit))? = null
 
     init {
-        setterPanel = CCColorChooserSetterPanel(color.primaryColor, this)
-        previewPanel = CCColorChooserPreviewPanel(this, useGradient, backgroundImage)
+        setterPanel = ColorChooserSetterPanel(color.primaryColor, this)
+        previewPanel = ColorComposerPreviewPanel(this, useGradient, backgroundImage)
         colorChangeListener = ChangeListener { alertChangeListeners() }
         color.addChangeListener(colorChangeListener)
         setTitle(title)
@@ -44,11 +52,13 @@ class CCColorChooser(color: CCColor = CCColor(Color.WHITE), title: String = "Col
     private fun init(x: Int, y: Int, parent: JFrame?) {
         val mainPanel = JPanel()
         val submitButtonPanel = JPanel()
+        val colorOptionsPanel = JPanel()
         val submit = JButton("Okay")
         submit.addActionListener { close() }
         mainPanel.layout = BoxLayout(mainPanel, BoxLayout.Y_AXIS)
         mainPanel.add(previewPanel)
         mainPanel.add(setterPanel)
+        mainPanel.add(colorOptionsPanel)
         mainPanel.add(submitButtonPanel)
         add(mainPanel)
         isFocusable = true
@@ -56,6 +66,7 @@ class CCColorChooser(color: CCColor = CCColor(Color.WHITE), title: String = "Col
         pack()
         submit.preferredSize = Dimension(width / 2, 50)
         submitButtonPanel.add(submit)
+        colorOptionsPanel.add(ColorOptionsPanel())
         pack()
         if(parent == null) {
             Toolkit.getDefaultToolkit().screenSize.also {
@@ -78,7 +89,7 @@ class CCColorChooser(color: CCColor = CCColor(Color.WHITE), title: String = "Col
         changeListeners.forEach { it.stateChanged(ChangeEvent(this)) }
     }
 
-    fun setOnClose(action: (CCColorChooser) -> (Unit)) {
+    fun setOnClose(action: (ColorComposer) -> (Unit)) {
         onClose = action
     }
 

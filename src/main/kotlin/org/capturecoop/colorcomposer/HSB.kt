@@ -1,8 +1,9 @@
-package org.capturecoop.cccolorutils
+package org.capturecoop.colorcomposer
 
 import java.awt.Color
 
-class CCHSB {
+//TODO: Cleanup & refactor
+class HSB {
     val hue: Float
     val saturation: Float
     val brightness: Float
@@ -30,10 +31,10 @@ class CCHSB {
         }
     }
 
-    override fun toString() = "CCHSB[hue: $hue, saturation: $saturation, brightness: $brightness, alpha: $alpha]"
+    override fun toString() = "HSB(hue: $hue, saturation=$saturation, brightness=$brightness, alpha=$alpha)"
     override fun equals(other: Any?): Boolean {
         if(other == null || other != this) return false
-        if(other !is CCHSB) return false
+        if(other !is HSB) return false
         return hue == other.hue && saturation == other.saturation && brightness == other.brightness && alpha == other.alpha
     }
 

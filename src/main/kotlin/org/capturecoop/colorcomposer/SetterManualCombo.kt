@@ -1,9 +1,9 @@
-package org.capturecoop.cccolorutils.chooser
+package org.capturecoop.colorcomposer
 
 import javax.swing.JSlider
 import javax.swing.JSpinner
 
-class CCSetterManualCombo(val slider: JSlider? = null, val spinner: JSpinner? = null) {
+class SetterManualCombo(val slider: JSlider? = null, val spinner: JSpinner? = null) {
     //Remove once port is complete
     constructor(slider: JSlider): this(slider, null)
     constructor(spinner: JSpinner): this(null, spinner)
