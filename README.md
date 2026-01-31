@@ -1,9 +1,14 @@
 # ColorComposer
 Color Library
 
-## How to use with Gradle:
+## How to use
 
-Coming soon
+Available on [Maven Central](https://central.sonatype.com/artifact/org.capturecoop/colorcomposer)
+
+Gradle:
+````
+implementation("org.capturecoop:colorcomposer:{version}")
+````
 
 ## Dependencies
 
