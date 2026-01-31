@@ -1,15 +1,14 @@
-package org.capturecoop.cccolorutils
+package org.capturecoop.colorcomposer
 
-import org.capturecoop.ccutils.math.CCVector2Float
-import org.capturecoop.ccutils.math.CCVector2Int
+import org.capturecoop.defaultdepot.math.Vector2F
 import java.awt.Color
 import java.awt.GradientPaint
 import java.awt.Paint
 import javax.swing.event.ChangeEvent
 import javax.swing.event.ChangeListener
 
-class CCColor {
-    var primaryColor: Color
+class ComposedColor {
+    var primaryColor: Color = Color.WHITE
         set(value) {
             field = value
             alertChangeListeners()
@@ -19,18 +18,18 @@ class CCColor {
             field = value
             alertChangeListeners()
         }
-    var point1: CCVector2Float? = null
+    var point1: Vector2F? = null
         set(value) {
             if(value != null) {
-                field = CCVector2Float(value)
+                field = Vector2F(value)
                 field!!.limit(0.0F, 1.0F)
             } else field = null
             alertChangeListeners()
         }
-    var point2: CCVector2Float? = null
+    var point2: Vector2F? = null
         set(value) {
             if(value != null) {
-                field = CCVector2Float(value)
+                field = Vector2F(value)
                 field!!.limit(0.0F, 1.0F)
             } else field = null
             alertChangeListeners()
@@ -53,7 +52,7 @@ class CCColor {
         primaryColor = color
     }
 
-    constructor(color: CCColor) {
+    constructor(color: ComposedColor) {
         primaryColor = color.primaryColor
         secondaryColor = color.secondaryColor
         isGradient = color.isGradient
@@ -61,7 +60,7 @@ class CCColor {
         color.point2?.let { point2 = it }
     }
 
-    constructor(color: CCColor, alpha: Int) {
+    constructor(color: ComposedColor, alpha: Int) {
         color.primaryColor.let { primaryColor = it.setAlpha(alpha) }
         color.secondaryColor?.let { secondaryColor = it.setAlpha(alpha) }
         isGradient = color.isGradient
@@ -88,7 +87,7 @@ class CCColor {
         ColorType.SECONDARY -> secondaryColor
     }
 
-    fun loadFromCCColor(otherColor: CCColor) {
+    fun loadFromComposedColor(otherColor: ComposedColor) {
         primaryColor = otherColor.primaryColor
         secondaryColor = otherColor.secondaryColor
         point1 = otherColor.point1
@@ -116,15 +115,15 @@ class CCColor {
         ensureSecondaryColor()
 
         //Long term we should make more convenient functions in CCUtils..
-        val point1int = CCVector2Int(point1!!.x * width, point1!!.y * height)
-        val point2int = CCVector2Int(point2!!.x * width, point2!!.y * height)
+        val point1int = Vector2F(point1!!.x * width, point1!!.y * height)
+        val point2int = Vector2F(point2!!.x * width, point2!!.y * height)
         return GradientPaint((point1int.x + posX).toFloat(), (point1int.y + posY).toFloat(), primaryColor, (point2int.x + posX).toFloat(), (point2int.y + posY).toFloat(), secondaryColor);
     }
 
     fun toSaveString(): String {
         fun alpha(c: Color) = if(c.alpha == 255) "" else "_a${c.alpha}"
         fun pos(type: ColorType): String{
-            fun p(p: CCVector2Float?) = if(p != null) "_x${p.x}_y${p.y}" else ""
+            fun p(p: Vector2F?) = if(p != null) "_x${p.x}_y${p.y}" else ""
             return when(type) {
                 ColorType.PRIMARY -> if (point1 != POINT_PRIMARY_DEFAULT) p(point1) else ""
                 ColorType.SECONDARY -> if(point2 != POINT_SECONDARY_DEFAULT) p(point2) else ""
@@ -144,11 +143,11 @@ class CCColor {
         return string
     }
 
-    override fun toString() = "CCGradientColor[primaryColor: ${CCColorUtils.toStringColor(primaryColor)}, secondaryColor: ${CCColorUtils.toStringColor(secondaryColor)}, point1: $point1, point2: $point2, isGradient: $isGradient]"
+    override fun toString() = "CCGradientColor(primaryColor=${ColorUtils.toStringColor(primaryColor)}, secondaryColor=${ColorUtils.toStringColor(secondaryColor)}, point1=$point1, point2=$point2, isGradient=$isGradient)"
 
     override fun equals(other: Any?): Boolean {
         if(other == null || other != this) return false
-        if(other !is CCColor) return false
+        if(other !is ComposedColor) return false
         return primaryColor.rgb == other.primaryColor.rgb &&
                 primaryColor.alpha == other.primaryColor.alpha &&
                 secondaryColor?.rgb == other.secondaryColor?.rgb &&
@@ -181,20 +180,20 @@ class CCColor {
     }
 
     companion object {
-        val POINT_PRIMARY_DEFAULT = CCVector2Float(0.0, 0.0)
-        val POINT_SECONDARY_DEFAULT = CCVector2Float(1.0, 1.0)
+        val POINT_PRIMARY_DEFAULT = Vector2F(0.0, 0.0)
+        val POINT_SECONDARY_DEFAULT = Vector2F(1.0, 1.0)
 
-        fun fromSaveString(string: String): CCColor {
-            val newColor = CCColor()
+        fun fromSaveString(string: String): ComposedColor {
+            val newColor = ComposedColor()
             string.split("___").forEachIndexed{ i, part ->
                 var alpha = -1
                 var color: Color? = null
                 val defaultPos = if(i != 0) 1.0F else 0.0F
-                val pos = CCVector2Float(defaultPos, defaultPos)
+                val pos = Vector2F(defaultPos, defaultPos)
                 part.split("_").forEach { str ->
                     val subString = str.substring(1)
                     when(str[0]) {
-                        '#' -> color = CCColorUtils.hex2rgb(str)
+                        '#' -> color = ColorUtils.hex2rgb(str)
                         'a' -> alpha = subString.toInt()
                         'x' -> pos.x = subString.toFloat()
                         'y' -> pos.y = subString.toFloat()

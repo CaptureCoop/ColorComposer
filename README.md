@@ -1,33 +1,20 @@
-# CCColorUtils
-Multi purpose library
+# ColorComposer
+Color Library
 
 ## How to use with Gradle:
 
-build.gradle:
-```
-dependencies {
-    implementation 'org.capturecoop:CCColorUtils:VERSION'
-}
-```
-settings.gradle:
-```
-sourceControl {
-    gitRepository("https://github.com/CaptureCoop/CCColorUtils.git") {
-        producesModule("org.capturecoop:CCColorUtils")
-    }
-}
-```
+Coming soon
 
 ## Dependencies
 
-* [CCUtils](https://github.com/capturecoop/ccutils)
+* [DefaultDepot](https://github.com/capturecoop/defaultdepot)
 
 
 ## License
 
 MIT License
 
-Copyright (c) 2022 CaptureCoop.org
+Copyright (c) 2026 CaptureCoop.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

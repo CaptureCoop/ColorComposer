@@ -1,21 +1,19 @@
-package org.capturecoop.cccolorutils.chooser.gui
+package org.capturecoop.colorcomposer.chooser
 
-import org.capturecoop.cccolorutils.CCColor
-import org.capturecoop.cccolorutils.CCColorUtils
-import org.capturecoop.cccolorutils.chooser.CCColorChooser
-import org.capturecoop.cccolorutils.draw
-import org.capturecoop.cccolorutils.fill
-import org.capturecoop.ccutils.math.CCVector2Float
+import org.capturecoop.colorcomposer.ComposedColor
+import org.capturecoop.colorcomposer.ColorUtils
+import org.capturecoop.colorcomposer.draw
+import org.capturecoop.colorcomposer.fill
+import org.capturecoop.defaultdepot.math.Vector2F
 import java.awt.*
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.awt.event.MouseMotionAdapter
 import java.awt.image.BufferedImage
 import javax.swing.JPanel
-import javax.swing.event.ChangeListener
 
-class CCColorChooserGradientPreview(colorChooser: CCColorChooser, private val previewBackground: BufferedImage?) : JPanel() {
-    private val color: CCColor = colorChooser.color
+class ColorComposerGradientPreview(colorComposer: ColorComposer, private val previewBackground: BufferedImage?) : JPanel() {
+    private val color: ComposedColor = colorComposer.color
     private var lastStartX = 0
     private var lastStartY = 0
     private var lastSize = 0
@@ -36,11 +34,11 @@ class CCColorChooserGradientPreview(colorChooser: CCColorChooser, private val pr
                 if (point1Rect != null && point1Rect!!.contains(mouseEvent.point)) {
                     pointControlled = 0
                     lastPointControlled = 0
-                    colorChooser.setterPanel.setColor(color.primaryColor, false, true)
+                    colorComposer.setterPanel.setColor(color.primaryColor, false, true)
                 } else if (point2Rect != null && point2Rect!!.contains(mouseEvent.point)) {
                     pointControlled = 1
                     lastPointControlled = 1
-                    colorChooser.setterPanel.setColor(color.secondaryColor!!, false, true)
+                    colorComposer.setterPanel.setColor(color.secondaryColor!!, false, true)
                 }
                 repaint()
             }
@@ -53,8 +51,8 @@ class CCColorChooserGradientPreview(colorChooser: CCColorChooser, private val pr
                     val x = (mouseEvent.x - lastStartX).toFloat() / size
                     val y = (mouseEvent.y - lastStartY).toFloat() / size
                     when(pointControlled) {
-                        0 -> color.point1 = CCVector2Float(x, y)
-                        1 -> color.point2 = CCVector2Float(x, y)
+                        0 -> color.point1 = Vector2F(x, y)
+                        1 -> color.point2 = Vector2F(x, y)
                     }
                     repaint()
                 }
@@ -102,7 +100,7 @@ class CCColorChooserGradientPreview(colorChooser: CCColorChooser, private val pr
         point2Rect = Rectangle(startX - offset / 2 + (lastSize * color.point2!!.x).toInt(), (lastSize * color.point2!!.y).toInt(), offset, offset)
         g.color = color.primaryColor
         point1Rect!!.fill(g)
-        g.color = CCColorUtils.getContrastColor(color.primaryColor)
+        g.color = ColorUtils.getContrastColor(color.primaryColor)
         point1Rect!!.draw(g)
         if (lastPointControlled == 0) {
             val oldStroke = g.stroke
@@ -112,7 +110,7 @@ class CCColorChooserGradientPreview(colorChooser: CCColorChooser, private val pr
         }
         g.color = color.secondaryColor
         point2Rect!!.fill(g)
-        g.color = CCColorUtils.getContrastColor(color.secondaryColor!!)
+        g.color = ColorUtils.getContrastColor(color.secondaryColor!!)
         point2Rect!!.draw(g)
         if (lastPointControlled == 1) {
             val oldStroke = g.stroke

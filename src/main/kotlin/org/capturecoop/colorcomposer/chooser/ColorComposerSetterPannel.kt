@@ -1,17 +1,6 @@
-package org.capturecoop.cccolorutils.chooser.gui
+package org.capturecoop.colorcomposer.chooser
 
-import org.capturecoop.cccolorutils.CCColor.Companion.fromSaveString
-import org.capturecoop.cccolorutils.CCColorUtils
-import org.capturecoop.cccolorutils.CCColorUtils.hex2rgb
-import org.capturecoop.cccolorutils.CCColorUtils.rgb2hex
-import org.capturecoop.cccolorutils.CCColorUtils.setColorAlpha
-import org.capturecoop.cccolorutils.CCColorUtils.setColorBlue
-import org.capturecoop.cccolorutils.CCColorUtils.setColorGreen
-import org.capturecoop.cccolorutils.CCColorUtils.setColorRed
-import org.capturecoop.cccolorutils.CCHSB
-import org.capturecoop.cccolorutils.chooser.CCColorChooser
-import org.capturecoop.cccolorutils.chooser.CCISetterManualUpdate
-import org.capturecoop.cccolorutils.chooser.CCSetterManualCombo
+import org.capturecoop.colorcomposer.*
 import java.awt.*
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
@@ -20,7 +9,7 @@ import javax.swing.*
 import javax.swing.event.ChangeEvent
 import javax.swing.event.ChangeListener
 
-class CCColorChooserSetterPanel(var color: Color, private val chooser: CCColorChooser) : JPanel() {
+class ColorChooserSetterPanel(var color: Color, private val chooser: ColorComposer) : JPanel() {
     private val changeListeners = ArrayList<ChangeListener>()
     private val sliderUpdateListeners = ArrayList<ChangeListener>()
     private val visualUpdateListeners = ArrayList<ChangeListener>()
@@ -29,9 +18,9 @@ class CCColorChooserSetterPanel(var color: Color, private val chooser: CCColorCh
         layout = GridLayout(0, 2)
 
         //Picker elements
-        val picker = CCHSBPicker(color, true)
-        val hueBar = CCHSBHueBar(color, CCColorUtils.DIRECTION.VERTICAL, true)
-        val alphaBar = CCAlphaBar(color, CCColorUtils.DIRECTION.VERTICAL, true)
+        val picker = HSBPicker(color, true)
+        val hueBar = HSBHueBar(color, BarDirection.VERTICAL, true)
+        val alphaBar = AlphaBar(color, BarDirection.VERTICAL, true)
 
         //Set size
         picker.preferredSize = Dimension(256, 256)
@@ -40,7 +29,7 @@ class CCColorChooserSetterPanel(var color: Color, private val chooser: CCColorCh
             alphaBar.preferredSize = it
         }
         visualUpdateListeners.add(ChangeListener {
-            CCHSB(color).also { hsb ->
+            HSB(color).also { hsb ->
                 picker.hue = hsb.hue
                 picker.saturation = hsb.saturation
                 picker.brightness = hsb.brightness
@@ -58,19 +47,19 @@ class CCColorChooserSetterPanel(var color: Color, private val chooser: CCColorCh
 
         //Add Listeners
         picker.addChangeListener {
-            setColor(setColorAlpha(picker.color, color.alpha), true, false)
+            setColor(ColorUtils.setColorAlpha(picker.color, color.alpha), true, false)
             alphaBar.setBackgroundColor(color)
             updateSliderListeners()
         }
         hueBar.addChangeListener {
             val hue = hueBar.hue
             picker.hue = hue
-            setColor(setColorAlpha(picker.color, color.alpha), true, false)
+            setColor(ColorUtils.setColorAlpha(picker.color, color.alpha), true, false)
             alphaBar.setBackgroundColor(color)
             updateSliderListeners()
         }
         alphaBar.addChangeListener {
-            setColor(setColorAlpha(color, alphaBar.getAlpha()), true, false)
+            setColor(ColorUtils.setColorAlpha(color, alphaBar.getAlpha()), true, false)
             updateSliderListeners()
         }
         val rgbPanel = JPanel()
@@ -85,7 +74,7 @@ class CCColorChooserSetterPanel(var color: Color, private val chooser: CCColorCh
         updateSliderListeners()
     }
 
-    private fun setupHSBSliders(panel: JPanel, picker: CCHSBPicker, hueBar: CCHSBHueBar, alphaBar: CCAlphaBar): JPanel {
+    private fun setupHSBSliders(panel: JPanel, picker: HSBPicker, hueBar: HSBHueBar, alphaBar: AlphaBar): JPanel {
         panel.removeAll()
         val gbc = GridBagConstraints()
         gbc.insets = Insets(5, 5, 5, 5)
@@ -94,26 +83,26 @@ class CCColorChooserSetterPanel(var color: Color, private val chooser: CCColorCh
             val hueValue = it!!.getValue() / 100f
             picker.hue = hueValue
             hueBar.hue = hueValue
-            setColor(setColorAlpha(picker.color, color.alpha), true, false)
+            setColor(ColorUtils.setColorAlpha(picker.color, color.alpha), true, false)
             updateVisualListeners()
         }
         val saturationSlider = createSettings(panel, "Saturation", 0, 100, isSetter, gbc) {
-                picker.saturation = it!!.getValue() / 100f
-                setColor(setColorAlpha(picker.color, color.alpha), true, false)
-                updateVisualListeners()
-            }
+            picker.saturation = it!!.getValue() / 100f
+            setColor(ColorUtils.setColorAlpha(picker.color, color.alpha), true, false)
+            updateVisualListeners()
+        }
         val brightnessSlider = createSettings(panel, "Brightness", 0, 100, isSetter, gbc) {
-                picker.brightness = it!!.getValue() / 100f
-                setColor(setColorAlpha(picker.color, color.alpha), true, false)
-                updateVisualListeners()
-            }
+            picker.brightness = it!!.getValue() / 100f
+            setColor(ColorUtils.setColorAlpha(picker.color, color.alpha), true, false)
+            updateVisualListeners()
+        }
         val alphaSlider = createSettings(panel, "Alpha", 0, 255, isSetter, gbc) {
             alphaBar.setAlpha(it!!.getValue())
-            setColor(setColorAlpha(color, it.getValue()), true, false)
+            setColor(ColorUtils.setColorAlpha(color, it.getValue()), true, false)
             updateVisualListeners()
         }
         createHexInput(panel, gbc)
-        createCCColorFormatField(panel, gbc)
+        createComposedColorFormatField(panel, gbc)
         sliderUpdateListeners.add(ChangeListener {
             isSetter.set(true)
             hue.setValue((picker.hue * 100f).toInt())
@@ -131,23 +120,23 @@ class CCColorChooserSetterPanel(var color: Color, private val chooser: CCColorCh
         gbc.insets = Insets(5, 5, 5, 5)
         val isSetter = AtomicBoolean(false)
         val red = createSettings(panel, "Red", 0, 255, isSetter, gbc) {
-            setColor(setColorRed(color, it!!.getValue()), true, false)
+            setColor(ColorUtils.setColorRed(color, it!!.getValue()), true, false)
             updateVisualListeners()
         }
         val green = createSettings(panel, "Green", 0, 255, isSetter, gbc) {
-            setColor(setColorGreen(color, it!!.getValue()), true, false)
+            setColor(ColorUtils.setColorGreen(color, it!!.getValue()), true, false)
             updateVisualListeners()
         }
         val blue = createSettings(panel, "Blue", 0, 255, isSetter, gbc) {
-            setColor(setColorBlue(color, it!!.getValue()), true, false)
+            setColor(ColorUtils.setColorBlue(color, it!!.getValue()), true, false)
             updateVisualListeners()
         }
         val alpha = createSettings(panel, "Alpha", 0, 255, isSetter, gbc) {
-            setColor(setColorAlpha(color, it!!.getValue()), true, false)
+            setColor(ColorUtils.setColorAlpha(color, it!!.getValue()), true, false)
             updateVisualListeners()
         }
         createHexInput(panel, gbc)
-        createCCColorFormatField(panel, gbc)
+        createComposedColorFormatField(panel, gbc)
         sliderUpdateListeners.add(ChangeListener {
             isSetter.set(true)
             red.setValue(color.red)
@@ -159,7 +148,7 @@ class CCColorChooserSetterPanel(var color: Color, private val chooser: CCColorCh
         return panel
     }
 
-    private fun createSettings(panel: JPanel, title: String?, min: Int, max: Int, isSetter: AtomicBoolean, gbc: GridBagConstraints, onUpdate: CCISetterManualUpdate): CCSetterManualCombo {
+    private fun createSettings(panel: JPanel, title: String?, min: Int, max: Int, isSetter: AtomicBoolean, gbc: GridBagConstraints, onUpdate: ISetterManualUpdate): SetterManualCombo {
         val slider = JSlider(min, max)
         val spinner = JSpinner()
         slider.minimum = min
@@ -167,7 +156,7 @@ class CCColorChooserSetterPanel(var color: Color, private val chooser: CCColorCh
         slider.preferredSize = Dimension(240, 16)
         slider.addChangeListener {
             if (!isSetter.get())
-                onUpdate.update(CCSetterManualCombo(slider))
+                onUpdate.update(SetterManualCombo(slider))
             spinner.value = slider.value
         }
         gbc.gridx = 0
@@ -176,16 +165,16 @@ class CCColorChooserSetterPanel(var color: Color, private val chooser: CCColorCh
         panel.add(slider, gbc)
         spinner.addChangeListener {
             if (!isSetter.get())
-                onUpdate.update(CCSetterManualCombo(spinner))
+                onUpdate.update(SetterManualCombo(spinner))
             slider.value = spinner.value as Int
         }
         spinner.model = SpinnerNumberModel(0, min, max, 1)
         gbc.gridx = 2
         panel.add(spinner, gbc)
-        return CCSetterManualCombo(slider, spinner)
+        return SetterManualCombo(slider, spinner)
     }
 
-    private fun createCCColorFormatField(panel: JPanel, gbc: GridBagConstraints) {
+    private fun createComposedColorFormatField(panel: JPanel, gbc: GridBagConstraints) {
         val textArea = JTextField(chooser.color.toSaveString())
         val size = textArea.preferredSize
         size.width = size.width * 3
@@ -197,7 +186,7 @@ class CCColorChooserSetterPanel(var color: Color, private val chooser: CCColorCh
                 when (e.keyCode) {
                     KeyEvent.VK_ENTER, KeyEvent.VK_ESCAPE -> {
                         chooser.requestFocus()
-                        chooser.color = fromSaveString(textArea.text)
+                        chooser.color = ComposedColor.fromSaveString(textArea.text)
                     }
                 }
             }
@@ -211,7 +200,7 @@ class CCColorChooserSetterPanel(var color: Color, private val chooser: CCColorCh
     }
 
     private fun createHexInput(panel: JPanel, gbc: GridBagConstraints) {
-        val textArea = JTextField(rgb2hex(color))
+        val textArea = JTextField(ColorUtils.rgb2hex(color))
         val size = textArea.preferredSize
         size.width = size.width * 2
         textArea.preferredSize = size
@@ -220,13 +209,13 @@ class CCColorChooserSetterPanel(var color: Color, private val chooser: CCColorCh
                 when (e.keyCode) {
                     KeyEvent.VK_ENTER, KeyEvent.VK_ESCAPE -> {
                         chooser.requestFocus()
-                        val temp = hex2rgb(textArea.text)
-                        if (temp != null) setColor(temp, true, true) else textArea.text = rgb2hex(color)
+                        val temp = ColorUtils.hex2rgb(textArea.text)
+                        if (temp != null) setColor(temp, true, true) else textArea.text = ColorUtils.rgb2hex(color)
                     }
                 }
             }
         })
-        val update = ChangeListener { textArea.text = rgb2hex(color) }
+        val update = ChangeListener { textArea.text = ColorUtils.rgb2hex(color) }
         visualUpdateListeners.add(update)
         sliderUpdateListeners.add(update)
         gbc.gridx = 0

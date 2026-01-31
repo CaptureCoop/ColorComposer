@@ -1,12 +1,13 @@
-package org.capturecoop.cccolorutils
+package org.capturecoop.colorcomposer
 
+import org.capturecoop.colorcomposer.chooser.BarDirection
 import java.awt.Color
 import java.awt.Graphics
 import java.awt.Graphics2D
 import java.awt.Rectangle
 import java.awt.image.BufferedImage
 
-object CCColorUtils {
+object ColorUtils {
     fun rgb2hex(color: Color) = String.format("#%02x%02x%02x", color.red, color.green, color.blue)
 
     fun hex2rgb(colorStr: String) = try {
@@ -18,21 +19,21 @@ object CCColorUtils {
         null
     }
 
-    fun createAlphaBar(color: Color, width: Int, height: Int, direction: DIRECTION): BufferedImage {
+    fun createAlphaBar(color: Color, width: Int, height: Int, direction: BarDirection): BufferedImage {
         val image = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
         val g = image.graphics as Graphics2D
         var amount = width
         var step = 255f / width
         var alpha = 0f
-        if (direction == DIRECTION.VERTICAL) {
+        if (direction == BarDirection.VERTICAL) {
             amount = height
             step = 255f / height
         }
         for (pos in 0 until amount) {
             g.color = Color(color.red, color.green, color.blue, alpha.toInt())
             when (direction) {
-                DIRECTION.VERTICAL -> g.drawLine(0, pos, width, pos)
-                DIRECTION.HORIZONTAL -> g.drawLine(pos, 0, pos, height)
+                BarDirection.VERTICAL -> g.drawLine(0, pos, width, pos)
+                BarDirection.HORIZONTAL -> g.drawLine(pos, 0, pos, height)
             }
             alpha += step
         }
@@ -40,21 +41,21 @@ object CCColorUtils {
         return image
     }
 
-    fun createHSVHueBar(width: Int, height: Int, direction: DIRECTION): BufferedImage {
+    fun createHSVHueBar(width: Int, height: Int, direction: BarDirection): BufferedImage {
         val image = BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
         val g = image.graphics as Graphics2D
         var hue = 0f
         var amount = width
         var step = 1f / width
-        if (direction == DIRECTION.VERTICAL) {
+        if (direction == BarDirection.VERTICAL) {
             amount = height
             step = 1f / height
         }
         for (pos in 0 until amount) {
-            g.color = CCHSB(hue, 1f, 1f).asColor()
+            g.color = HSB(hue, 1f, 1f).asColor()
             when (direction) {
-                DIRECTION.VERTICAL -> g.drawLine(0, pos, width, pos)
-                DIRECTION.HORIZONTAL -> g.drawLine(pos, 0, pos, height)
+                BarDirection.VERTICAL -> g.drawLine(0, pos, width, pos)
+                BarDirection.HORIZONTAL -> g.drawLine(pos, 0, pos, height)
             }
             hue += step
         }
@@ -73,7 +74,7 @@ object CCColorUtils {
             saturation = 0f
             for (x in 0 until width) {
                 saturation += stepWidth
-                g.color = CCHSB(hue, saturation, brightness).asColor()
+                g.color = HSB(hue, saturation, brightness).asColor()
                 g.drawLine(x, y, x, y)
             }
             brightness -= stepHeight
@@ -96,6 +97,4 @@ object CCColorUtils {
         val y = (299f * color.red + 587 * color.green + 114 * color.blue / 1000).toDouble()
         return if (y >= 128) Color.black else Color.white
     }
-
-    enum class DIRECTION { VERTICAL, HORIZONTAL }
 }
